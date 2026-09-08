@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://byskopf.github.io/check-selt/sitemap.xml
