@@ -1,0 +1,30 @@
+{
+  "id": "./",
+  "name": "CHECK-LT",
+  "short_name": "CHECK-LT",
+  "description": "Portal de instalação e acesso ao CHECK-LT.",
+  "lang": "pt-BR",
+  "start_url": "./?origem=pwa",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["standalone", "fullscreen"],
+  "orientation": "any",
+  "background_color": "#0b2239",
+  "theme_color": "#0b2239",
+  "categories": ["business", "productivity", "utilities"],
+  "prefer_related_applications": false,
+  "launch_handler": { "client_mode": "navigate-existing" },
+  "icons": [
+    { "src": "https://byskopf.github.io/CHECK-SE/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "https://byskopf.github.io/CHECK-SE/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ],
+  "shortcuts": [
+    {
+      "name": "Abrir CHECK-LT",
+      "short_name": "Abrir",
+      "description": "Abrir o ambiente do CHECK-LT",
+      "url": "./?abrir=1",
+      "icons": [{ "src": "https://byskopf.github.io/CHECK-SE/icon-192.png", "sizes": "192x192", "type": "image/png" }]
+    }
+  ]
+}
