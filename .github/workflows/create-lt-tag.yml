@@ -1,0 +1,72 @@
+name: Criar tag de versão CHECK-LT
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Versão no formato X.Y.Z (exemplo: 1.1.0)'
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: create-check-lt-version-tag
+  cancel-in-progress: false
+
+jobs:
+  create-tag:
+    name: Validar e criar tag do LT
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar todo o histórico
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Validar versão informada
+        id: version
+        shell: bash
+        env:
+          INPUT_VERSION: ${{ inputs.version }}
+        run: |
+          if [[ ! "$INPUT_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "A versão deve usar o formato X.Y.Z, sem a letra v." >&2
+            exit 1
+          fi
+          echo "tag=check-lt-v$INPUT_VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Validar PWA antes da versão
+        run: |
+          node scripts/validate-lt-pwa.mjs
+          node --check lt/app.js
+          node --check lt/sw.js
+
+      - name: Confirmar versão do app-config
+        shell: bash
+        env:
+          INPUT_VERSION: ${{ inputs.version }}
+        run: |
+          node -e "const fs=require('fs'); const v=process.env.INPUT_VERSION; const s=fs.readFileSync('lt/app-config.js','utf8'); if(!s.includes(\"version: '\"+v+\"'\")) throw new Error('A versão de lt/app-config.js não corresponde a '+v);"
+
+      - name: Impedir tag duplicada
+        shell: bash
+        env:
+          TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          if git rev-parse "$TAG" >/dev/null 2>&1; then
+            echo "A tag $TAG já existe." >&2
+            exit 1
+          fi
+
+      - name: Criar e publicar tag
+        shell: bash
+        env:
+          TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag -a "$TAG" -m "CHECK-LT $TAG"
+          git push origin "$TAG"
