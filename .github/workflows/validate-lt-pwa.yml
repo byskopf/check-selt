@@ -1,0 +1,40 @@
+name: Validar CHECK-LT PWA
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'lt/**'
+      - 'scripts/validate-lt-pwa.mjs'
+      - '.github/workflows/validate-lt-pwa.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'lt/**'
+      - 'scripts/validate-lt-pwa.mjs'
+      - '.github/workflows/validate-lt-pwa.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Verificar portal instalável
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar o código
+        uses: actions/checkout@v4
+
+      - name: Preparar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Validar estrutura do CHECK-LT
+        run: node scripts/validate-lt-pwa.mjs
+
+      - name: Validar sintaxe JavaScript
+        run: |
+          node --check lt/app.js
+          node --check lt/sw.js
