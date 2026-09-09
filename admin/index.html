@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+  <meta name="theme-color" content="#0b2239">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="CHECK Admin">
+  <title>Central Administrativa CHECK</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="https://byskopf.github.io/CHECK-SE/icon-192.png">
+  <link rel="apple-touch-icon" href="https://byskopf.github.io/CHECK-SE/icon-192.png">
+  <style>
+    :root{--navy:#0b2239;--navy2:#123a57;--green:#18a071;--bg:#f3f7f9;--line:#d9e3e8;--text:#173044;--muted:#6a7a86}
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+    html,body{margin:0;min-height:100%;overscroll-behavior:none;background:var(--bg);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--text)}
+    body{min-height:100dvh;display:grid;place-items:center;padding:24px 16px calc(24px + env(safe-area-inset-bottom));touch-action:pan-x pan-y}
+    .card{width:min(100%,460px);background:#fff;border:1px solid var(--line);border-radius:24px;padding:28px 22px;box-shadow:0 20px 50px rgba(11,34,57,.12);text-align:center}
+    .logo{width:74px;height:74px;border-radius:20px;background:var(--navy);margin:0 auto 16px;display:grid;place-items:center;color:#fff;font-weight:900;font-size:22px;letter-spacing:.02em;position:relative}
+    .logo:after{content:'✓';position:absolute;right:8px;bottom:5px;color:#62e0ad;font-size:25px}
+    .eyebrow{font-size:11px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:var(--green)}
+    h1{font-size:27px;line-height:1.08;margin:8px 0 8px;color:var(--navy)}
+    p{margin:0 0 22px;color:var(--muted);line-height:1.5}
+    .status{display:inline-flex;align-items:center;gap:7px;background:#edf8f4;color:#17684f;border-radius:999px;padding:7px 11px;font-size:12px;font-weight:800;margin-bottom:18px}
+    .dot{width:8px;height:8px;border-radius:50%;background:var(--green)}
+    .actions{display:grid;gap:10px}
+    button,a{min-height:50px;border-radius:13px;font:inherit;font-weight:850;text-decoration:none;display:flex;align-items:center;justify-content:center;border:1px solid var(--line);cursor:pointer}
+    .primary{background:var(--navy);border-color:var(--navy);color:#fff}.secondary{background:#fff;color:var(--navy)}
+    .hint{font-size:12px;color:var(--muted);margin-top:14px}
+    .offline .dot{background:#c64b4b}.offline .status{background:#fff1f1;color:#973939}
+    .toast{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(12px);background:#0b2239;color:white;border-radius:999px;padding:10px 14px;font-size:13px;font-weight:800;opacity:0;pointer-events:none;transition:.18s;white-space:nowrap}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  </style>
+</head>
+<body>
+  <main class="card">
+    <div class="logo">ADM</div>
+    <div class="eyebrow">CHECK-SE + CHECK-LT</div>
+    <h1>Central Administrativa</h1>
+    <p>Gestão de usuários, acessos, backups e recursos administrativos dos dois sistemas.</p>
+    <div class="status"><span class="dot"></span><span id="statusText">Online</span></div>
+    <div class="actions">
+      <button class="primary" id="installButton">Instalar aplicativo</button>
+      <a class="secondary" id="openButton" href="#">Abrir Central</a>
+    </div>
+    <div class="hint" id="hint">Instale para abrir em tela cheia pelo ícone do celular.</div>
+  </main>
+  <div class="toast" id="toast">Pressione voltar novamente para sair</div>
+  <script src="app-config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
