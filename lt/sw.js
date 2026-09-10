@@ -1,5 +1,5 @@
 /* Service Worker for CHECK-LT */
-importScripts('app-config.js');
+importScripts('app-config.js?v=1.0.1');
 var PWA_VERSION = self.CHECK_LT_CONFIG && self.CHECK_LT_CONFIG.version;
 if (!PWA_VERSION) throw new Error('Versão do CHECK-LT não configurada.');
 var CACHE_PREFIX = 'check-lt-launcher-';
