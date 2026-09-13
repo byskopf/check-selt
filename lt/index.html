@@ -4,30 +4,30 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#0b293d">
-  <meta name="description" content="Gestão de pendências, correções e aprovações de obras e comissionamento de linhas de transmissão.">
+  <meta name="description" content="Localizador de Pisca, Localizador de Estrutura, comissionamento, pendências e relatórios PDF para linhas de transmissão.">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="CHECK-LT">
-  <title>CHECK-LT | Comissionamento Inteligente</title>
+  <title>CHECK-LT | Ferramentas e gestão de linhas de transmissão</title>
   <link rel="canonical" href="https://byskopf.github.io/check-selt/lt/">
 
   <meta property="og:locale" content="pt_BR">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="CHECK-LT">
-  <meta property="og:title" content="CHECK-LT | Comissionamento Inteligente">
-  <meta property="og:description" content="Pendências, correções e aprovações de obras e comissionamento de linhas de transmissão — tudo em um só lugar.">
+  <meta property="og:title" content="CHECK-LT | Ferramentas e gestão de linhas de transmissão">
+  <meta property="og:description" content="Localizador de Pisca, consulta de estruturas, comissionamento e gestão de pendências com relatórios PDF.">
   <meta property="og:url" content="https://byskopf.github.io/check-selt/lt/">
   <meta property="og:image" content="https://byskopf.github.io/check-selt/og-check-selt.jpg?v=4">
   <meta property="og:image:secure_url" content="https://byskopf.github.io/check-selt/og-check-selt.jpg?v=4">
   <meta property="og:image:type" content="image/jpeg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="CHECK-LT — Comissionamento Inteligente">
+  <meta property="og:image:alt" content="CHECK-LT — Ferramentas e gestão de linhas de transmissão">
 
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="CHECK-LT | Comissionamento Inteligente">
-  <meta name="twitter:description" content="Pendências, correções e aprovações de obras e comissionamento de linhas de transmissão — tudo em um só lugar.">
+  <meta name="twitter:title" content="CHECK-LT | Ferramentas e gestão de linhas de transmissão">
+  <meta name="twitter:description" content="Localizador de Pisca, consulta de estruturas, comissionamento e gestão de pendências com relatórios PDF.">
   <meta name="twitter:image" content="https://byskopf.github.io/check-selt/og-check-selt.jpg?v=4">
 
   <link rel="preconnect" href="https://script.google.com">
@@ -39,6 +39,14 @@
   <link rel="icon" href="https://byskopf.github.io/CHECK-SE/icon-192.png" sizes="192x192" type="image/png">
   <link rel="apple-touch-icon" href="https://byskopf.github.io/CHECK-SE/apple-touch-icon.png" sizes="180x180">
   <link rel="stylesheet" href="https://byskopf.github.io/CHECK-SE/styles.css">
+  <style>
+    .features{margin-top:24px;padding-top:20px;border-top:1px solid rgba(255,255,255,.14);text-align:left}
+    .features h2{margin:0 0 14px;font-size:1rem;font-weight:600;line-height:1.4}
+    .features dl{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:0}
+    .features dt{font-size:.9rem;font-weight:600;line-height:1.4}
+    .features dd{margin:5px 0 0;font-size:.84rem;line-height:1.55;color:#b6c6d3}
+    @media(max-width:480px){.features dl{grid-template-columns:1fr;gap:14px}}
+  </style>
   <script src="app-config.js" defer></script>
   <script src="app.js" defer></script>
 </head>
@@ -71,7 +79,7 @@
 
       <div class="wordmark">
         <h1 id="pageTitle"><span>CHECK-</span><strong>LT</strong></h1>
-        <p>Comissionamento inteligente</p>
+        <p>Ferramentas e gestão de linhas de transmissão</p>
       </div>
 
       <p class="intro" id="introText">Instale no celular para abrir em tela cheia e acessar o CHECK-LT mais rapidamente.</p>
@@ -94,6 +102,16 @@
         <li><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M8 3H3v5M16 3h5v5M8 21H3v-5M16 21h5v-5"/></svg><span>Tela inteira</span></li>
         <li><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M13 2 5 13h6l-1 9 8-12h-6z"/></svg><span>Acesso rápido</span></li>
       </ul>
+
+      <section class="features" aria-labelledby="featuresTitle">
+        <h2 id="featuresTitle">O que você encontra no CHECK-LT</h2>
+        <dl>
+          <div><dt>Localizador de Pisca</dt><dd>Estime o ponto da ocorrência na linha a partir do LDF informado pelo relé.</dd></div>
+          <div><dt>Localizador de Estrutura</dt><dd>Busque a estrutura pelo número e consulte seus dados e localização.</dd></div>
+          <div><dt>Comissionamento e pendências</dt><dd>Acompanhe obras, pendências, correções e aprovações nas linhas de transmissão.</dd></div>
+          <div><dt>Relatórios PDF</dt><dd>Gere relatórios para fiscalização e prestadora para apoiar o acompanhamento e a conferência em campo.</dd></div>
+        </dl>
+      </section>
 
       <div class="security-note">
         <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3 5 6v5c0 4.6 2.8 8 7 10 4.2-2 7-5.4 7-10V6z"/><path class="accent" d="m9 12 2 2 4-4"/></svg>
