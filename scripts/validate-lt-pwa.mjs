@@ -38,7 +38,7 @@ if (manifest) {
   if (manifest.name !== 'CHECK-LT' || manifest.short_name !== 'CHECK-LT') {
     failures.push('O manifest deve identificar o aplicativo como CHECK-LT.');
   }
-  if (manifest.scope !== './' || manifest.display !== 'standalone') {
+  if (!['./', '/check-selt/lt/'].includes(manifest.scope) || manifest.display !== 'standalone') {
     failures.push('O CHECK-LT deve continuar instalável em modo standalone e escopo próprio.');
   }
   if (!Array.isArray(manifest.icons) || manifest.icons.length === 0) {
@@ -66,7 +66,7 @@ for (const meta of [
 ]) {
   if (!indexHtml.includes(meta)) failures.push('Metadado obrigatório ausente: ' + meta);
 }
-if (!indexHtml.includes('CHECK-LT | Comissionamento Inteligente')) {
+if (!indexHtml.includes('CHECK-LT | Ferramentas e gestão de linhas de transmissão')) {
   failures.push('Título oficial do CHECK-LT ausente no index.html.');
 }
 
@@ -98,7 +98,11 @@ if (appJavaScript.includes('script.google.com/macros/s/')) {
 }
 
 const serviceWorker = await readFile(base + 'sw.js', 'utf8').catch(() => '');
-if (!serviceWorker.includes("importScripts('app-config.js')")) failures.push('sw.js deve importar app-config.js.');
+const importedConfig = serviceWorker.match(/importScripts\(\s*['"]app-config\.js(?:\?v=([^'"]+))?['"]\s*\)/);
+if (!importedConfig) failures.push('sw.js deve importar app-config.js.');
+if (importedConfig && importedConfig[1] && configVersion && importedConfig[1] !== configVersion[1]) {
+  failures.push('A versão importada pelo sw.js deve corresponder à versão do app-config.js.');
+}
 for (const file of ['index.html', 'app-config.js', 'app.js', 'manifest.json', 'offline.html']) {
   if (!serviceWorker.includes(file)) failures.push(`sw.js não referencia o arquivo essencial ${file}.`);
 }
