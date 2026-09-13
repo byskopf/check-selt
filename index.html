@@ -5,27 +5,27 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="google-site-verification" content="l9FXF1if1u2_aIgaA07pWWLaH3MpQh8sEuIshI9_0Tk">
   <meta name="theme-color" content="#081f31">
-  <meta name="description" content="Portal de acesso aos sistemas CHECK-SE e CHECK-LT para gestão de obras e comissionamento.">
-  <title>CHECK-SE e CHECK-LT | Obras e comissionamento</title>
+  <meta name="description" content="Acesse o CHECK-SE para obras e comissionamento de subestações e o CHECK-LT para localizadores, pendências e gestão de linhas de transmissão.">
+  <title>CHECK-SE e CHECK-LT | Subestações e linhas de transmissão</title>
   <link rel="canonical" href="https://byskopf.github.io/check-selt/">
 
   <meta property="og:locale" content="pt_BR">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="CHECK-SE/LT">
-  <meta property="og:title" content="CHECK-SE e CHECK-LT | Obras e comissionamento">
-  <meta property="og:description" content="Obras e comissionamento em um só lugar. Acesse o CHECK-SE e o CHECK-LT.">
+  <meta property="og:title" content="CHECK-SE e CHECK-LT | Subestações e linhas de transmissão">
+  <meta property="og:description" content="Acesse o CHECK-SE para obras e comissionamento de subestações e o CHECK-LT para localizadores, pendências e gestão de linhas de transmissão.">
   <meta property="og:url" content="https://byskopf.github.io/check-selt/">
-  <meta property="og:image" content="https://byskopf.github.io/check-selt/og-check-selt.jpg?v=1">
-  <meta property="og:image:secure_url" content="https://byskopf.github.io/check-selt/og-check-selt.jpg?v=1">
+  <meta property="og:image" content="https://byskopf.github.io/check-selt/og-check-selt-20260913.jpg">
+  <meta property="og:image:secure_url" content="https://byskopf.github.io/check-selt/og-check-selt-20260913.jpg">
   <meta property="og:image:type" content="image/jpeg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="CHECK-SE/LT — Obras e comissionamento em um só lugar">
+  <meta property="og:image:alt" content="CHECK-SE e CHECK-LT — Subestações e linhas de transmissão">
 
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="CHECK-SE e CHECK-LT | Obras e comissionamento">
-  <meta name="twitter:description" content="Obras e comissionamento em um só lugar.">
-  <meta name="twitter:image" content="https://byskopf.github.io/check-selt/og-check-selt.jpg?v=1">
+  <meta name="twitter:title" content="CHECK-SE e CHECK-LT | Subestações e linhas de transmissão">
+  <meta name="twitter:description" content="Acesse o CHECK-SE para obras e comissionamento de subestações e o CHECK-LT para localizadores, pendências e gestão de linhas de transmissão.">
+  <meta name="twitter:image" content="https://byskopf.github.io/check-selt/og-check-selt-20260913.jpg">
   <style>
     :root{color-scheme:dark;--navy:#081f31;--surface:#0d2b42;--line:rgba(255,255,255,.11);--text:#f4f8fb;--muted:#a9bac7;--green:#5ce0a8;--amber:#ffc45c}
     *{box-sizing:border-box}
@@ -57,6 +57,13 @@
     footer{margin-top:30px;text-align:center;color:#8295a4;font-size:.84rem}
     @media(max-width:650px){.shell{justify-content:flex-start;padding-top:42px}.systems{grid-template-columns:1fr}.card{min-height:230px}header{margin-bottom:26px}}
     @media(prefers-reduced-motion:reduce){.card{transition:none}}
+    .feature-list{padding:0;margin:0 0 26px;list-style:none;color:#d5e2ec;line-height:1.6;font-size:.94rem}
+    .feature-list li{padding:8px 0 8px 22px;position:relative}.feature-list li:before{content:"✓";position:absolute;left:0;color:var(--green)}
+    .card p{margin-bottom:12px;min-height:48px}.card h2{font-weight:700}.status,.button{font-weight:600}
+    .share-button{padding:12px 8px;margin-top:10px;background:none;border:0;color:#bdf3d9;font:inherit;font-size:.86rem;font-weight:600;cursor:pointer}
+    .share-button[hidden]{display:none}.share-button:hover{text-decoration:underline}.share-button:focus-visible{outline:2px solid var(--green);outline-offset:3px;border-radius:8px}
+    .share-portal{text-align:center;margin-top:26px;padding-top:16px;border-top:1px solid var(--line)}.share-portal p{color:var(--muted);font-size:.9rem;margin:8px}.share-portal button{border:1px solid rgba(92,224,168,.28);padding:12px 20px;border-radius:12px}
+    #shareStatus:empty{display:none}header p{max-width:670px}
   </style>
 </head>
 <body>
@@ -66,7 +73,7 @@
         <svg viewBox="0 0 48 48"><rect x="10" y="9" width="28" height="30" rx="4"/><path d="m16 24 5 5 11-12M24 3v6m0 30v6"/></svg>
       </div>
       <h1><span>CHECK-</span><strong>SE/LT</strong></h1>
-      <p>Selecione o sistema para acessar a gestão de obras, pendências e comissionamento.</p>
+      <p>Subestações e linhas de transmissão.<br>Ferramentas de campo, obras e comissionamento em um só lugar.</p>
     </header>
 
     <section class="systems" aria-label="Sistemas disponíveis">
@@ -78,11 +85,12 @@
           <span class="status">Disponível</span>
         </div>
         <h2>CHECK-SE</h2>
-        <p>Obras e comissionamento de subestações.</p>
-        <a class="button" href="./se/" aria-label="Acessar o CHECK-SE">
-          <span>Acessar sistema</span>
+        <p>Gestão e comissionamento de subestações.</p><ul class="feature-list"><li>Obras e comissionamento</li><li>Gestão de pendências e correções</li><li>Conferência e aprovação dos itens</li></ul>
+        <a class="button" href="https://byskopf.github.io/CHECK-SE/" aria-label="Acessar o CHECK-SE">
+          <span>Acessar CHECK-SE</span>
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-5-5 5 5-5 5"/></svg>
         </a>
+        <button class="share-button" type="button" hidden data-share-title="CHECK-SE" data-share-url="https://byskopf.github.io/CHECK-SE/">Compartilhar este sistema</button>
       </article>
 
       <article class="card">
@@ -93,15 +101,18 @@
           <span class="status">Disponível</span>
         </div>
         <h2>CHECK-LT</h2>
-        <p>Localizador de Pisca, consulta de estruturas e comissionamento de linhas de transmissão, com gestão de pendências e relatórios PDF.</p>
+        <p>Ferramentas e gestão de linhas de transmissão.</p><ul class="feature-list"><li>Localizador de Pisca e de Estrutura</li><li>Comissionamento e pendências</li><li>Relatórios PDF para as equipes</li></ul>
         <a class="button" href="./lt/" aria-label="Acessar o CHECK-LT">
-          <span>Acessar sistema</span>
+          <span>Acessar CHECK-LT</span>
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-5-5 5 5-5 5"/></svg>
         </a>
+        <button class="share-button" type="button" hidden data-share-title="CHECK-LT" data-share-url="https://byskopf.github.io/check-selt/lt/">Compartilhar este sistema</button>
       </article>
     </section>
 
-    <footer>Portal oficial CHECK-SE/LT</footer>
+    <div class="share-portal"><p>Leve o acesso para sua equipe.</p><button class="share-button" type="button" hidden data-share-title="CHECK-SE e CHECK-LT" data-share-url="https://byskopf.github.io/check-selt/">Compartilhar o portal</button><p id="shareStatus" role="status" aria-live="polite"></p></div>
+    <footer>Portal oficial CHECK-SE/LT · Acesso no celular e no computador</footer>
+    <script src="share.js" defer></script>
   </main>
 </body>
 </html>

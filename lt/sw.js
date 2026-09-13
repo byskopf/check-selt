@@ -1,12 +1,12 @@
 /* Service Worker for CHECK-LT */
-importScripts('app-config.js?v=1.0.2');
+importScripts('app-config.js?v=1.0.3');
 var PWA_VERSION = self.CHECK_LT_CONFIG && self.CHECK_LT_CONFIG.version;
 if (!PWA_VERSION) throw new Error('Versão do CHECK-LT não configurada.');
 var CACHE_PREFIX = 'check-lt-launcher-';
 var CACHE_NAME = CACHE_PREFIX + 'pwa-' + PWA_VERSION;
 var scopeBase;
 try { scopeBase = new URL('.', self.registration.scope).href; } catch (e) { scopeBase = self.location.origin + '/check-selt/lt/'; }
-var APP_SHELL = ['index.html','app-config.js','app.js','manifest.json','favicon.svg','offline.html'].map(function (name) { return new URL(name, scopeBase).href; });
+var APP_SHELL = ['index.html','app-config.js','app.js','../share.js','manifest.json','favicon.svg','offline.html'].map(function (name) { return new URL(name, scopeBase).href; });
 APP_SHELL.push('https://byskopf.github.io/CHECK-SE/styles.css','https://byskopf.github.io/CHECK-SE/icon-192.png','https://byskopf.github.io/CHECK-SE/icon-512.png','https://byskopf.github.io/CHECK-SE/apple-touch-icon.png');
 
 self.addEventListener('install', function (event) {
