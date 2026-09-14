@@ -1,5 +1,5 @@
 /* Configuração única do portal CHECK-LT. */
 var CHECK_LT_CONFIG = Object.freeze({
-  version: '1.0.3',
-  appUrl: 'https://script.google.com/macros/s/AKfycbzo_WN_PzoRhS-LhV070vmE8GDr1vJX9qEa1iqxADe6kVhNZa968olZLVVDAtObmvE/exec'
+  version: '1.0.4',
+  appUrl: 'https://script.google.com/macros/s/AKfycbwc-RzVoPxAIiBYbVzhWlbIwY95lyr8debnwlXZAnMGj__B0rfCWg1NRggeXDYv5rw/exec'
 });
