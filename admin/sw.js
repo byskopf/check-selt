@@ -1,4 +1,4 @@
-const CACHE='check-admin-v1.0.0';
+const CACHE='check-admin-v1.0.1';
 const SHELL=['./','./index.html','./manifest.json','./app-config.js','./app.js'];
 self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE).then(c=>c.addAll(SHELL)));self.skipWaiting();});
 self.addEventListener('activate',event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('check-admin-')&&k!==CACHE).map(k=>caches.delete(k)))));self.clients.claim();});
