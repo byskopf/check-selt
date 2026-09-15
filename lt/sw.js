@@ -1,12 +1,33 @@
 /* Service Worker for CHECK-LT */
-importScripts('app-config.js?v=1.0.8');
+importScripts('app-config.js?v=1.0.9');
 var PWA_VERSION = self.CHECK_LT_CONFIG && self.CHECK_LT_CONFIG.version;
+var ICON_VERSION = self.CHECK_LT_CONFIG && self.CHECK_LT_CONFIG.iconVersion || PWA_VERSION;
 if (!PWA_VERSION) throw new Error('Versão do CHECK-LT não configurada.');
 var CACHE_PREFIX = 'check-lt-launcher-';
 var CACHE_NAME = CACHE_PREFIX + 'pwa-' + PWA_VERSION;
 var scopeBase;
 try { scopeBase = new URL('.', self.registration.scope).href; } catch (e) { scopeBase = self.location.origin + '/check-selt/lt/'; }
-var APP_SHELL = ['index.html','app-config.js','app.js','styles.css','../share.js','manifest.json','favicon.svg','offline.html','icon-192.png','icon-512.png','icon-maskable-192.png','icon-maskable-512.png','apple-touch-icon.png'].map(function (name) { return new URL(name, scopeBase).href; });
+var APP_SHELL = [
+  'index.html',
+  'app-config.js',
+  'app.js',
+  'styles.css',
+  '../share.js',
+  'manifest.json',
+  'favicon.svg',
+  'offline.html',
+  'icon-192.png',
+  'icon-512.png',
+  'icon-maskable-192.png',
+  'icon-maskable-512.png',
+  'apple-touch-icon.png'
+].map(function (name) {
+  var assetUrl = new URL(name, scopeBase);
+  if (/^(?:icon-|apple-touch-icon)/.test(name)) {
+    assetUrl.searchParams.set('v', ICON_VERSION);
+  }
+  return assetUrl.href;
+});
 
 self.addEventListener('install', function (event) {
   event.waitUntil(caches.open(CACHE_NAME).then(function (cache) {

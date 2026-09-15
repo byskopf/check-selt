@@ -20,6 +20,15 @@ const requiredFiles = [
 
 const failures = [];
 
+const iconAssetPath = (src) => String(src || '').split(/[?#]/)[0].replace(/^\.\//, '');
+const iconVersionOf = (src) => {
+  try {
+    return new URL(String(src || ''), 'https://pwa.local/').searchParams.get('v');
+  } catch {
+    return null;
+  }
+};
+
 for (const file of requiredFiles) {
   try {
     await access(base + file, constants.R_OK);
@@ -84,6 +93,29 @@ if (!indexHtml.includes('CHECK-LT | Ferramentas e gestão de linhas de transmiss
 const configSource = await readFile(base + 'app-config.js', 'utf8').catch(() => '');
 const configVersion = configSource.match(/version:\s*['\"]([^'\"]+)['\"]/);
 const configAppUrl = configSource.match(/appUrl:\s*['\"]([^'\"]+)['\"]/);
+const configIconVersion = configSource.match(/iconVersion:\s*['"]([^'"]+)['"]/);
+if (!configIconVersion || !/^[0-9A-Za-z._-]+$/.test(configIconVersion[1])) {
+  failures.push('app-config.js deve declarar uma versão de ícones válida.');
+}
+if (manifest && configIconVersion) {
+  const shortcutIcons = Array.isArray(manifest.shortcuts)
+    ? manifest.shortcuts.flatMap((shortcut) => Array.isArray(shortcut.icons) ? shortcut.icons : [])
+    : [];
+  const declaredIcons = [
+    ...(Array.isArray(manifest.icons) ? manifest.icons : []),
+    ...shortcutIcons,
+  ];
+  for (const icon of declaredIcons) {
+    if (iconVersionOf(icon.src) !== configIconVersion[1]) {
+      failures.push('Todos os ícones do CHECK-LT devem usar ?v=' + configIconVersion[1] + ' para atualizar instalações existentes.');
+      break;
+    }
+  }
+  if (!indexHtml.includes('apple-touch-icon.png?v=' + configIconVersion[1])) {
+    failures.push('O ícone Apple Touch deve usar a mesma versão de ícones.');
+  }
+}
+
 if (!configVersion || !/^\d+\.\d+\.\d+$/.test(configVersion[1])) {
   failures.push('app-config.js deve declarar uma versão semântica válida.');
 }
@@ -112,6 +144,9 @@ if (appJavaScript.includes('script.google.com/macros/s/')) {
 }
 
 const serviceWorker = await readFile(base + 'sw.js', 'utf8').catch(() => '');
+if (!serviceWorker.includes('ICON_VERSION') || !serviceWorker.includes('iconVersion')) {
+  failures.push('O Service Worker deve pré-carregar os ícones usando a versão configurada.');
+}
 const importedConfig = serviceWorker.match(/importScripts\(\s*['"]app-config\.js(?:\?v=([^'"]+))?['"]\s*\)/);
 if (!importedConfig) failures.push('sw.js deve importar app-config.js.');
 if (importedConfig && importedConfig[1] && configVersion && importedConfig[1] !== configVersion[1]) {
