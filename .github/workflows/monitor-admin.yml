@@ -1,0 +1,83 @@
+name: Monitorar Central Administrativa
+
+on:
+  schedule:
+    - cron: '30 */3 * * *'
+  workflow_dispatch:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'admin/app-config.js'
+      - '.github/workflows/monitor-admin.yml'
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  verificar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar configuração
+        uses: actions/checkout@v4
+
+      - name: Portal da Central
+        run: |
+          status=$(curl -L -s -o /tmp/admin-portal.html -w "%{http_code}" --max-time 20 "https://byskopf.github.io/check-selt/admin/")
+          echo "HTTP $status"
+          if [ "$status" != "200" ]; then
+            echo "::error::Portal da Central respondeu HTTP $status."
+            exit 1
+          fi
+          if ! grep -qi "Central Administrativa" /tmp/admin-portal.html; then
+            echo "::error::Portal publicado não contém a identificação da Central."
+            exit 1
+          fi
+
+      - name: Ambiente administrativo no Apps Script
+        run: |
+          app_url=$(node -e "const fs=require('fs');const s=fs.readFileSync('admin/app-config.js','utf8');const m=s.match(/appUrl:\\s*['\"]([^'\"]+)['\"]/);if(!m)process.exit(2);process.stdout.write(m[1]);")
+          status=$(curl -L -s -o /tmp/admin-app.html -w "%{http_code}" --max-time 30 "$app_url")
+          tamanho=$(wc -c < /tmp/admin-app.html)
+          echo "HTTP $status - $tamanho bytes"
+          if [ "$status" != "200" ]; then
+            echo "::error::Ambiente administrativo respondeu HTTP $status."
+            exit 1
+          fi
+          if [ "$tamanho" -lt 5000 ]; then
+            echo "::error::Ambiente administrativo devolveu conteúdo pequeno demais ($tamanho bytes)."
+            exit 1
+          fi
+          if ! grep -Eqi "Central Administrativa|CHECK Admin" /tmp/admin-app.html; then
+            echo "::error::Resposta não contém a identificação da Central."
+            exit 1
+          fi
+
+      - name: Abrir ou atualizar Issue de alerta
+        if: failure() && github.event_name != 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = '🔴 Monitoramento: Central Administrativa fora do ar';
+            const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            const body = `O monitoramento automático da Central detectou uma falha em ${new Date().toISOString()}.\n\nVeja o log: ${runUrl}`;
+            const { data: issues } = await github.rest.issues.listForRepo({ owner: context.repo.owner, repo: context.repo.repo, state: 'open' });
+            const existing = issues.find(issue => issue.title === title);
+            if (existing) {
+              await github.rest.issues.createComment({ owner: context.repo.owner, repo: context.repo.repo, issue_number: existing.number, body });
+            } else {
+              await github.rest.issues.create({ owner: context.repo.owner, repo: context.repo.repo, title, body });
+            }
+
+      - name: Fechar alerta quando recuperar
+        if: success() && github.event_name != 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = '🔴 Monitoramento: Central Administrativa fora do ar';
+            const { data: issues } = await github.rest.issues.listForRepo({ owner: context.repo.owner, repo: context.repo.repo, state: 'open' });
+            const existing = issues.find(issue => issue.title === title);
+            if (existing) {
+              await github.rest.issues.createComment({ owner: context.repo.owner, repo: context.repo.repo, issue_number: existing.number, body: `Voltou ao normal em ${new Date().toISOString()}.` });
+              await github.rest.issues.update({ owner: context.repo.owner, repo: context.repo.repo, issue_number: existing.number, state: 'closed' });
+            }
