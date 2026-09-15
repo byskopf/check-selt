@@ -44,8 +44,11 @@ if (manifest) {
   if (manifest.name !== 'CHECK-LT' || manifest.short_name !== 'CHECK-LT') {
     failures.push('O manifest deve identificar o aplicativo como CHECK-LT.');
   }
-  if (!['./', '/check-selt/lt/'].includes(manifest.scope) || manifest.display !== 'standalone') {
-    failures.push('O CHECK-LT deve continuar instalável em modo standalone e escopo próprio.');
+  if (manifest.id !== '/check-selt/lt/' || !['./', '/check-selt/lt/'].includes(manifest.scope)) {
+    failures.push('O CHECK-LT deve manter identidade e escopo próprios em /check-selt/lt/.');
+  }
+  if (manifest.display !== 'standalone') {
+    failures.push('O CHECK-LT deve continuar instalável em modo standalone.');
   }
   if (!Array.isArray(manifest.icons) || manifest.icons.length === 0) {
     failures.push('manifest.json deve declarar pelo menos um ícone.');
@@ -101,6 +104,9 @@ const appJavaScript = await readFile(base + 'app.js', 'utf8').catch(() => '');
 if (!appJavaScript.includes('CHECK_LT_CONFIG')) failures.push('app.js deve usar CHECK_LT_CONFIG.');
 if (!appJavaScript.includes('beforeinstallprompt')) failures.push('app.js perdeu o fluxo de instalação PWA.');
 if (!appJavaScript.includes("serviceWorker")) failures.push('app.js perdeu o registro do Service Worker.');
+if (!/updateViaCache\s*:\s*['"]none['"]/.test(appJavaScript)) {
+  failures.push('O registro do Service Worker deve ignorar o cache HTTP ao procurar atualizações.');
+}
 if (appJavaScript.includes('script.google.com/macros/s/')) {
   failures.push('app.js não deve repetir a URL do Apps Script; use app-config.js.');
 }
