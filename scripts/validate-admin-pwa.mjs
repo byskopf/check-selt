@@ -38,8 +38,12 @@ if (manifest) {
       failures.push(`Campo obrigatório ausente no manifest.json: ${field}`);
     }
   }
-  if (manifest.id !== '/check-selt/admin/' || manifest.scope !== '/check-selt/admin/') {
-    failures.push('A Central deve manter ID e escopo próprios em /check-selt/admin/.');
+  if (
+    manifest.id !== '/check-selt/admin/' ||
+    manifest.scope !== '/check-selt/admin/' ||
+    !String(manifest.start_url).startsWith('/check-selt/admin/')
+  ) {
+    failures.push('A Central deve manter ID, início e escopo próprios em /check-selt/admin/.');
   }
   if (manifest.display !== 'standalone') {
     failures.push('A Central deve continuar instalável em modo standalone.');
@@ -55,7 +59,7 @@ const indexHtml = await readFile(base + 'index.html', 'utf8').catch(() => '');
 for (const reference of ['manifest.json', 'app-config.js', 'app.js']) {
   if (!indexHtml.includes(reference)) failures.push(`index.html não referencia ${reference}.`);
 }
-for (const element of ['installButton', 'openButton', 'installDialog', 'updateBanner']) {
+for (const element of ['installButton', 'openButton', 'installDialog', 'updateBanner', 'launchOverlay', 'launchRetry']) {
   if (!indexHtml.includes(`id="${element}"`)) {
     failures.push(`A Central perdeu o elemento obrigatório ${element}.`);
   }
@@ -84,6 +88,15 @@ const appJavaScript = await readFile(base + 'app.js', 'utf8').catch(() => '');
 if (!appJavaScript.includes('CHECK_ADMIN_CONFIG')) failures.push('app.js deve usar CHECK_ADMIN_CONFIG.');
 if (!appJavaScript.includes('beforeinstallprompt')) failures.push('app.js perdeu o fluxo de instalação PWA.');
 if (!appJavaScript.includes('controllerchange')) failures.push('app.js perdeu o fluxo de atualização assistida.');
+if (!/updateViaCache\s*:\s*['"]none['"]/.test(appJavaScript)) {
+  failures.push('O registro do Service Worker deve ignorar o cache HTTP ao procurar atualizações.');
+}
+if (!appJavaScript.includes('visibilitychange')) {
+  failures.push('A Central deve verificar atualizações ao retomar o aplicativo.');
+}
+if (!appJavaScript.includes('launchOverlay')) {
+  failures.push('A Central perdeu o retorno visual durante a abertura.');
+}
 if (appJavaScript.includes('script.google.com/macros/s/')) {
   failures.push('app.js não deve repetir a URL do Apps Script; use app-config.js.');
 }
@@ -93,6 +106,11 @@ const importedConfig = serviceWorker.match(/importScripts\(\s*['"]app-config\.js
 if (!importedConfig) failures.push('sw.js deve importar app-config.js.');
 if (importedConfig && importedConfig[1] && configVersion && importedConfig[1] !== configVersion[1]) {
   failures.push('A versão importada pelo sw.js deve corresponder à versão da Central.');
+}
+
+const packageJson = JSON.parse(await readFile('package.json', 'utf8').catch(() => '{}'));
+if (configVersion && packageJson.version !== configVersion[1]) {
+  failures.push('A versão do package.json deve corresponder à versão da Central.');
 }
 for (const file of ['index.html', 'app-config.js', 'app.js', 'manifest.json', 'offline.html']) {
   if (!serviceWorker.includes(file)) failures.push(`sw.js não referencia o arquivo essencial ${file}.`);
