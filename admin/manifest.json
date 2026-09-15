@@ -1,14 +1,34 @@
 {
+  "id": "/check-selt/admin/",
   "name": "Central Administrativa CHECK",
   "short_name": "CHECK Admin",
   "description": "Central Administrativa do CHECK-SE e CHECK-LT",
-  "start_url": "./?origem=pwa",
-  "scope": "./",
+  "lang": "pt-BR",
+  "start_url": "/check-selt/admin/?origem=pwa",
+  "scope": "/check-selt/admin/",
   "display": "standalone",
+  "display_override": ["standalone", "fullscreen"],
+  "orientation": "any",
   "background_color": "#0b2239",
   "theme_color": "#0b2239",
+  "categories": ["business", "productivity", "utilities"],
+  "prefer_related_applications": false,
+  "launch_handler": { "client_mode": "navigate-existing" },
   "icons": [
-    {"src":"https://byskopf.github.io/CHECK-SE/icon-192.png","sizes":"192x192","type":"image/png"},
-    {"src":"https://byskopf.github.io/CHECK-SE/icon-512.png","sizes":"512x512","type":"image/png"}
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-maskable-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    {
+      "name": "Abrir Central Administrativa",
+      "short_name": "Abrir Central",
+      "description": "Abrir o ambiente administrativo do CHECK",
+      "url": "./?abrir=1",
+      "icons": [
+        { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" }
+      ]
+    }
   ]
 }

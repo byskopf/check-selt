@@ -1,23 +1,20 @@
 import { access, readFile } from 'node:fs/promises';
 import { constants } from 'node:fs';
 
-const base = 'lt/';
+const base = 'admin/';
 const requiredFiles = [
   'index.html',
   'app-config.js',
   'app.js',
-  'styles.css',
   'manifest.json',
   'sw.js',
   'offline.html',
-  'favicon.svg',
   'icon-192.png',
   'icon-512.png',
   'icon-maskable-192.png',
   'icon-maskable-512.png',
   'apple-touch-icon.png',
 ];
-
 const failures = [];
 
 for (const file of requiredFiles) {
@@ -36,51 +33,37 @@ try {
 }
 
 if (manifest) {
-  for (const field of ['name', 'short_name', 'start_url', 'scope', 'display', 'icons']) {
+  for (const field of ['id', 'name', 'short_name', 'start_url', 'scope', 'display', 'icons']) {
     if (manifest[field] === undefined || manifest[field] === '') {
       failures.push(`Campo obrigatório ausente no manifest.json: ${field}`);
     }
   }
-  if (manifest.name !== 'CHECK-LT' || manifest.short_name !== 'CHECK-LT') {
-    failures.push('O manifest deve identificar o aplicativo como CHECK-LT.');
+  if (manifest.id !== '/check-selt/admin/' || manifest.scope !== '/check-selt/admin/') {
+    failures.push('A Central deve manter ID e escopo próprios em /check-selt/admin/.');
   }
-  if (!['./', '/check-selt/lt/'].includes(manifest.scope) || manifest.display !== 'standalone') {
-    failures.push('O CHECK-LT deve continuar instalável em modo standalone e escopo próprio.');
+  if (manifest.display !== 'standalone') {
+    failures.push('A Central deve continuar instalável em modo standalone.');
   }
-  if (!Array.isArray(manifest.icons) || manifest.icons.length === 0) {
-    failures.push('manifest.json deve declarar pelo menos um ícone.');
+  if (!Array.isArray(manifest.icons) || manifest.icons.length < 2) {
+    failures.push('A Central deve declarar ícones de instalação.');
   } else if (manifest.icons.some((icon) => /^https?:\/\//i.test(icon.src || ''))) {
-    failures.push('Os ícones do CHECK-LT devem ser locais para funcionar offline sem depender do CHECK-SE.');
+    failures.push('Os ícones da Central devem ser locais para o modo offline.');
   }
 }
 
 const indexHtml = await readFile(base + 'index.html', 'utf8').catch(() => '');
-for (const reference of ['manifest.json', 'app-config.js', 'app.js', 'styles.css']) {
+for (const reference of ['manifest.json', 'app-config.js', 'app.js']) {
   if (!indexHtml.includes(reference)) failures.push(`index.html não referencia ${reference}.`);
 }
-for (const element of ['installButton', 'openButton', 'installDialog', 'launchOverlay']) {
-  if (!indexHtml.includes(`id="${element}"`)) failures.push(`Portal perdeu o elemento obrigatório ${element}.`);
-}
-if (/<meta[^>]+http-equiv=["']refresh["']/i.test(indexHtml)) {
-  failures.push('index.html não pode voltar a usar redirecionamento automático por meta refresh.');
-}
-if (/location\.(replace|assign)\(["']https:\/\/script\.google\.com/i.test(indexHtml)) {
-  failures.push('index.html não pode redirecionar diretamente ao Apps Script. Use o portal instalável.');
-}
-for (const meta of [
-  'property="og:image:type" content="image/jpeg"',
-  'property="og:image:width" content="1200"',
-  'property="og:image:height" content="630"',
-]) {
-  if (!indexHtml.includes(meta)) failures.push('Metadado obrigatório ausente: ' + meta);
-}
-if (!indexHtml.includes('CHECK-LT | Ferramentas e gestão de linhas de transmissão')) {
-  failures.push('Título oficial do CHECK-LT ausente no index.html.');
+for (const element of ['installButton', 'openButton', 'installDialog', 'updateBanner']) {
+  if (!indexHtml.includes(`id="${element}"`)) {
+    failures.push(`A Central perdeu o elemento obrigatório ${element}.`);
+  }
 }
 
 const configSource = await readFile(base + 'app-config.js', 'utf8').catch(() => '');
-const configVersion = configSource.match(/version:\s*['\"]([^'\"]+)['\"]/);
-const configAppUrl = configSource.match(/appUrl:\s*['\"]([^'\"]+)['\"]/);
+const configVersion = configSource.match(/version:\s*['"]([^'"]+)['"]/);
+const configAppUrl = configSource.match(/appUrl:\s*['"]([^'"]+)['"]/);
 if (!configVersion || !/^\d+\.\d+\.\d+$/.test(configVersion[1])) {
   failures.push('app-config.js deve declarar uma versão semântica válida.');
 }
@@ -98,9 +81,9 @@ if (!configAppUrl) {
 }
 
 const appJavaScript = await readFile(base + 'app.js', 'utf8').catch(() => '');
-if (!appJavaScript.includes('CHECK_LT_CONFIG')) failures.push('app.js deve usar CHECK_LT_CONFIG.');
+if (!appJavaScript.includes('CHECK_ADMIN_CONFIG')) failures.push('app.js deve usar CHECK_ADMIN_CONFIG.');
 if (!appJavaScript.includes('beforeinstallprompt')) failures.push('app.js perdeu o fluxo de instalação PWA.');
-if (!appJavaScript.includes("serviceWorker")) failures.push('app.js perdeu o registro do Service Worker.');
+if (!appJavaScript.includes('controllerchange')) failures.push('app.js perdeu o fluxo de atualização assistida.');
 if (appJavaScript.includes('script.google.com/macros/s/')) {
   failures.push('app.js não deve repetir a URL do Apps Script; use app-config.js.');
 }
@@ -109,20 +92,17 @@ const serviceWorker = await readFile(base + 'sw.js', 'utf8').catch(() => '');
 const importedConfig = serviceWorker.match(/importScripts\(\s*['"]app-config\.js(?:\?v=([^'"]+))?['"]\s*\)/);
 if (!importedConfig) failures.push('sw.js deve importar app-config.js.');
 if (importedConfig && importedConfig[1] && configVersion && importedConfig[1] !== configVersion[1]) {
-  failures.push('A versão importada pelo sw.js deve corresponder à versão do app-config.js.');
+  failures.push('A versão importada pelo sw.js deve corresponder à versão da Central.');
 }
-for (const file of ['index.html', 'app-config.js', 'app.js', 'styles.css', 'manifest.json', 'offline.html']) {
+for (const file of ['index.html', 'app-config.js', 'app.js', 'manifest.json', 'offline.html']) {
   if (!serviceWorker.includes(file)) failures.push(`sw.js não referencia o arquivo essencial ${file}.`);
 }
-if (!serviceWorker.includes('check-lt-launcher-')) failures.push('Cache do CHECK-LT deve permanecer isolado.');
-if (serviceWorker.includes('https://byskopf.github.io/CHECK-SE/')) {
-  failures.push('O cache do CHECK-LT não deve depender dos arquivos do CHECK-SE.');
-}
+if (!serviceWorker.includes('check-admin-launcher-')) failures.push('Cache da Central deve permanecer isolado.');
 
 if (failures.length) {
-  console.error('Validação do CHECK-LT falhou:');
+  console.error('Validação da Central falhou:');
   for (const failure of failures) console.error(`- ${failure}`);
   process.exit(1);
 }
 
-console.log('CHECK-LT PWA validado com sucesso.');
+console.log('Central Administrativa PWA validada com sucesso.');

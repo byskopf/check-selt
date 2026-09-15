@@ -4,49 +4,85 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
   <meta name="theme-color" content="#0b2239">
+  <meta name="description" content="Central Administrativa do CHECK-SE e CHECK-LT para gestão de usuários, acessos e recursos administrativos.">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="CHECK Admin">
   <title>Central Administrativa CHECK</title>
+  <link rel="canonical" href="https://byskopf.github.io/check-selt/admin/">
   <link rel="manifest" href="manifest.json">
-  <link rel="icon" href="https://byskopf.github.io/CHECK-SE/icon-192.png">
-  <link rel="apple-touch-icon" href="https://byskopf.github.io/CHECK-SE/icon-192.png">
+  <link rel="icon" href="icon-192.png" sizes="192x192" type="image/png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" sizes="180x180">
   <style>
-    :root{--navy:#0b2239;--navy2:#123a57;--green:#18a071;--bg:#f3f7f9;--line:#d9e3e8;--text:#173044;--muted:#6a7a86}
+    :root{--navy:#0b2239;--navy2:#123a57;--green:#18a071;--green2:#62e0ad;--bg:#f3f7f9;--line:#d9e3e8;--text:#173044;--muted:#6a7a86}
     *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
     html,body{margin:0;min-height:100%;overscroll-behavior:none;background:var(--bg);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--text)}
     body{min-height:100dvh;display:grid;place-items:center;padding:24px 16px calc(24px + env(safe-area-inset-bottom));touch-action:pan-x pan-y}
     .card{width:min(100%,460px);background:#fff;border:1px solid var(--line);border-radius:24px;padding:28px 22px;box-shadow:0 20px 50px rgba(11,34,57,.12);text-align:center}
     .logo{width:74px;height:74px;border-radius:20px;background:var(--navy);margin:0 auto 16px;display:grid;place-items:center;color:#fff;font-weight:900;font-size:22px;letter-spacing:.02em;position:relative}
-    .logo:after{content:'✓';position:absolute;right:8px;bottom:5px;color:#62e0ad;font-size:25px}
+    .logo:after{content:'✓';position:absolute;right:8px;bottom:5px;color:var(--green2);font-size:25px}
     .eyebrow{font-size:11px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:var(--green)}
-    h1{font-size:27px;line-height:1.08;margin:8px 0 8px;color:var(--navy)}
+    h1{font-size:27px;line-height:1.08;margin:8px 0;color:var(--navy)}
     p{margin:0 0 22px;color:var(--muted);line-height:1.5}
     .status{display:inline-flex;align-items:center;gap:7px;background:#edf8f4;color:#17684f;border-radius:999px;padding:7px 11px;font-size:12px;font-weight:800;margin-bottom:18px}
     .dot{width:8px;height:8px;border-radius:50%;background:var(--green)}
     .actions{display:grid;gap:10px}
     button,a{min-height:50px;border-radius:13px;font:inherit;font-weight:850;text-decoration:none;display:flex;align-items:center;justify-content:center;border:1px solid var(--line);cursor:pointer}
+    button:disabled{opacity:.68;cursor:wait}
     .primary{background:var(--navy);border-color:var(--navy);color:#fff}.secondary{background:#fff;color:var(--navy)}
-    .hint{font-size:12px;color:var(--muted);margin-top:14px}
+    .hint{font-size:12px;color:var(--muted);margin-top:14px;line-height:1.5}
     .offline .dot{background:#c64b4b}.offline .status{background:#fff1f1;color:#973939}
-    .toast{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(12px);background:#0b2239;color:white;border-radius:999px;padding:10px 14px;font-size:13px;font-weight:800;opacity:0;pointer-events:none;transition:.18s;white-space:nowrap}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+    .toast{position:fixed;z-index:35;left:50%;bottom:calc(18px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(12px);background:var(--navy);color:white;border-radius:999px;padding:10px 14px;font-size:13px;font-weight:800;opacity:0;pointer-events:none;transition:.18s;white-space:nowrap}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+    .update-banner{position:fixed;z-index:30;left:50%;bottom:max(16px,env(safe-area-inset-bottom));width:min(calc(100% - 28px),460px);min-height:52px;padding:9px 10px 9px 15px;border:1px solid rgba(98,224,173,.34);border-radius:16px;display:flex;align-items:center;justify-content:space-between;gap:12px;transform:translateX(-50%);background:#102d46;color:#e7f2f8;box-shadow:0 16px 40px rgba(0,0,0,.38);font-size:.84rem;font-weight:700}
+    .update-banner[hidden]{display:none}.update-banner button{min-height:36px;padding:7px 13px;border:0;border-radius:10px;background:var(--green2);color:#071c2e}
+    .install-dialog{width:min(92%,420px);max-height:calc(100dvh - 30px);margin:auto;padding:0;border:1px solid #dbe6eb;border-radius:24px;background:#fff;color:var(--text);box-shadow:0 28px 80px rgba(0,0,0,.35)}
+    .install-dialog::backdrop{background:rgba(2,10,19,.68);backdrop-filter:blur(5px)}
+    .install-dialog form{position:relative;padding:28px;text-align:left}
+    .dialog-close{position:absolute;top:16px;right:16px;width:42px;height:42px;min-height:42px;border-radius:50%;background:#f3f7f9;color:var(--navy);font-size:20px}
+    .dialog-icon{width:51px;height:51px;border-radius:15px;display:grid;place-items:center;background:#e7f6f0;color:var(--green);font-size:25px;font-weight:900}
+    .install-dialog h2{margin:18px 48px 9px 0;font-size:1.35rem;color:var(--navy)}
+    .install-dialog p{margin:0 0 14px;font-size:.93rem}
+    .install-steps{margin:17px 0 22px;padding:0;display:grid;gap:11px;list-style:none;counter-reset:install-step}
+    .install-steps li{counter-increment:install-step;display:grid;grid-template-columns:34px 1fr;align-items:center;gap:10px;font-size:.91rem;line-height:1.4}
+    .install-steps li:before{content:counter(install-step);width:32px;height:32px;border-radius:10px;display:grid;place-items:center;background:#e7f6f0;color:var(--green);font-weight:850}
+    .dialog-done{width:100%;border:0;background:var(--navy);color:#fff}
+    @media(max-width:380px){.card{padding:24px 18px}.install-dialog form{padding:24px}}
+    @media(prefers-reduced-motion:reduce){*{transition:none!important}}
   </style>
 </head>
 <body>
+  <div id="updateBanner" class="update-banner" role="status" aria-live="polite" hidden>
+    <span id="updateText">Nova versão da Central disponível.</span>
+    <button id="updateButton" type="button">Atualizar</button>
+  </div>
+
   <main class="card">
     <div class="logo">ADM</div>
-    <div class="eyebrow">CHECK-SE + CHECK-LT</div>
+    <div class="eyebrow">Aplicativo oficial · CHECK-SE + CHECK-LT</div>
     <h1>Central Administrativa</h1>
     <p>Gestão de usuários, acessos, backups e recursos administrativos dos dois sistemas.</p>
     <div class="status"><span class="dot"></span><span id="statusText">Online</span></div>
     <div class="actions">
-      <button class="primary" id="installButton">Instalar aplicativo</button>
+      <button class="primary" id="installButton" type="button"><span id="installButtonText">Instalar Central</span></button>
       <a class="secondary" id="openButton" href="#">Abrir Central</a>
     </div>
-    <div class="hint" id="hint">Instale para abrir em tela cheia pelo ícone do celular.</div>
+    <div class="hint" id="hint" aria-live="polite">Toque para instalar o ícone da Central no celular.</div>
   </main>
+
   <div class="toast" id="toast">Pressione voltar novamente para sair</div>
+
+  <dialog class="install-dialog" id="installDialog" aria-labelledby="installDialogTitle">
+    <form method="dialog">
+      <button class="dialog-close" value="cancel" aria-label="Fechar instruções">×</button>
+      <div class="dialog-icon" aria-hidden="true">↓</div>
+      <h2 id="installDialogTitle">Instalar a Central</h2>
+      <div id="installInstructions"></div>
+      <button class="dialog-done" value="confirm">Entendi</button>
+    </form>
+  </dialog>
+
+  <noscript>Ative o JavaScript para instalar ou abrir a Central Administrativa.</noscript>
   <script src="app-config.js"></script>
   <script src="app.js"></script>
 </body>
