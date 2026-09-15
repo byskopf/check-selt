@@ -1,7 +1,8 @@
 /* Service Worker da Central Administrativa CHECK */
-importScripts('app-config.js?v=1.1.1');
+importScripts('app-config.js?v=1.1.2');
 
 var PWA_VERSION = self.CHECK_ADMIN_CONFIG && self.CHECK_ADMIN_CONFIG.version;
+var ICON_VERSION = self.CHECK_ADMIN_CONFIG && self.CHECK_ADMIN_CONFIG.iconVersion || PWA_VERSION;
 if (!PWA_VERSION) throw new Error('Versão da Central não configurada.');
 
 var CACHE_PREFIX = 'check-admin-launcher-';
@@ -25,7 +26,11 @@ var APP_SHELL = [
   'icon-maskable-512.png',
   'apple-touch-icon.png'
 ].map(function (name) {
-  return new URL(name, scopeBase).href;
+  var assetUrl = new URL(name, scopeBase);
+  if (/^(?:icon-|apple-touch-icon)/.test(name)) {
+    assetUrl.searchParams.set('v', ICON_VERSION);
+  }
+  return assetUrl.href;
 });
 
 self.addEventListener('install', function (event) {
