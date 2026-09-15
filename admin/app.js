@@ -9,10 +9,14 @@
   var deferredInstallPrompt = null;
   var serviceWorkerRegistration = null;
   var reloadAfterUpdate = false;
+  var launchSlowTimer = null;
   var userAgent = navigator.userAgent || '';
   var isIPadOS = navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1;
   var isIOS = /iphone|ipad|ipod/i.test(userAgent) || isIPadOS;
   var isAndroid = /android/i.test(userAgent);
+  var prefersReducedMotion = Boolean(
+    window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  );
   var isStandalone = Boolean(
     (window.matchMedia && (
       window.matchMedia('(display-mode: standalone)').matches ||
@@ -32,6 +36,10 @@
   var updateBanner = document.getElementById('updateBanner');
   var updateText = document.getElementById('updateText');
   var updateButton = document.getElementById('updateButton');
+  var launchOverlay = document.getElementById('launchOverlay');
+  var launchStatus = document.getElementById('launchStatus');
+  var launchLoader = document.getElementById('launchLoader');
+  var launchRetry = document.getElementById('launchRetry');
 
   document.documentElement.setAttribute('data-pwa-version', config.version);
   openButton.href = config.appUrl;
@@ -50,6 +58,56 @@
     } else {
       hint.textContent = 'Instale para abrir pelo ícone do celular ou computador.';
     }
+  }
+
+  function resetLaunchOverlay() {
+    if (launchSlowTimer) {
+      window.clearTimeout(launchSlowTimer);
+      launchSlowTimer = null;
+    }
+    launchStatus.textContent = 'Abrindo seu ambiente…';
+    launchLoader.hidden = false;
+    launchRetry.hidden = true;
+    launchRetry.disabled = false;
+    launchRetry.textContent = 'Tentar novamente';
+  }
+
+  function hideLaunchOverlay() {
+    if (launchSlowTimer) {
+      window.clearTimeout(launchSlowTimer);
+      launchSlowTimer = null;
+    }
+    launchOverlay.classList.remove('show');
+    launchOverlay.hidden = true;
+    resetLaunchOverlay();
+  }
+
+  function showLaunchOverlay() {
+    resetLaunchOverlay();
+    launchOverlay.hidden = false;
+    window.requestAnimationFrame(function () {
+      launchOverlay.classList.add('show');
+    });
+
+    launchSlowTimer = window.setTimeout(function () {
+      if (document.visibilityState === 'visible') {
+        launchStatus.textContent = 'Está demorando mais que o normal.';
+        launchLoader.hidden = true;
+        launchRetry.hidden = false;
+      }
+    }, 8000);
+  }
+
+  function navigateToCentral(replaceHistory) {
+    if (replaceHistory) window.location.replace(config.appUrl);
+    else window.location.assign(config.appUrl);
+  }
+
+  function openCentral(replaceHistory) {
+    showLaunchOverlay();
+    window.setTimeout(function () {
+      navigateToCentral(replaceHistory);
+    }, prefersReducedMotion ? 0 : 180);
   }
 
   function instructionMarkup() {
@@ -161,7 +219,19 @@
     if (navigator.onLine === false) {
       event.preventDefault();
       hint.textContent = 'Sem conexão. Reconecte para abrir a Central.';
+      return;
     }
+    if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey || event.button > 0) return;
+    event.preventDefault();
+    openCentral(false);
+  });
+
+  launchRetry.addEventListener('click', function () {
+    launchRetry.disabled = true;
+    launchRetry.textContent = 'Tentando novamente…';
+    launchStatus.textContent = 'Tentando abrir a Central novamente…';
+    launchLoader.hidden = false;
+    navigateToCentral(true);
   });
 
   updateButton.addEventListener('click', function () {
@@ -186,7 +256,7 @@
 
     window.addEventListener('load', function () {
       var dir = location.pathname.substring(0, location.pathname.lastIndexOf('/') + 1) || '/';
-      navigator.serviceWorker.register(dir + 'sw.js', { scope: dir })
+      navigator.serviceWorker.register(dir + 'sw.js', { scope: dir, updateViaCache: 'none' })
         .then(watchServiceWorker)
         .catch(function () {
           // O portal ainda pode abrir a Central sem o modo instalável.
@@ -194,11 +264,17 @@
     });
   }
 
-  window.addEventListener('pageshow', function () {
+  function refreshPortalState() {
+    hideLaunchOverlay();
     setOnlineState();
     if (serviceWorkerRegistration) {
       serviceWorkerRegistration.update().catch(function () {});
     }
+  }
+
+  window.addEventListener('pageshow', refreshPortalState);
+  document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState === 'visible') refreshPortalState();
   });
 
   /* Trava de puxar para atualizar no topo, mantendo a rolagem normal. */
@@ -236,9 +312,7 @@
   if (isStandalone) {
     installButton.hidden = true;
     if (navigator.onLine !== false) {
-      window.setTimeout(function () {
-        window.location.replace(config.appUrl);
-      }, 220);
+      openCentral(true);
     }
   } else if (isIOS) {
     installButtonText.textContent = isIPadOS || /ipad/i.test(userAgent)
