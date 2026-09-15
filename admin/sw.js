@@ -1,5 +1,5 @@
 /* Service Worker da Central Administrativa CHECK */
-importScripts('app-config.js?v=1.1.0');
+importScripts('app-config.js?v=1.1.1');
 
 var PWA_VERSION = self.CHECK_ADMIN_CONFIG && self.CHECK_ADMIN_CONFIG.version;
 if (!PWA_VERSION) throw new Error('Versão da Central não configurada.');
