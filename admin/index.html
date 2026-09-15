@@ -47,6 +47,13 @@
     .install-steps li{counter-increment:install-step;display:grid;grid-template-columns:34px 1fr;align-items:center;gap:10px;font-size:.91rem;line-height:1.4}
     .install-steps li:before{content:counter(install-step);width:32px;height:32px;border-radius:10px;display:grid;place-items:center;background:#e7f6f0;color:var(--green);font-weight:850}
     .dialog-done{width:100%;border:0;background:var(--navy);color:#fff}
+    .launch-overlay{position:fixed;z-index:60;inset:0;display:grid;place-items:center;padding:24px;background:rgba(5,22,37,.92);color:#fff;opacity:0;transition:opacity .18s ease}
+    .launch-overlay[hidden]{display:none}.launch-overlay.show{opacity:1}
+    .launch-panel{width:min(100%,340px);display:grid;justify-items:center;gap:12px;text-align:center}
+    .launch-panel strong{font-size:1.15rem}.launch-status{color:#d7e4eb;font-size:.9rem}
+    .launch-spinner{width:44px;height:44px;border-radius:50%;border:4px solid rgba(255,255,255,.22);border-top-color:var(--green2);animation:spin .8s linear infinite}
+    .launch-retry{min-height:42px;margin-top:4px;padding:8px 16px;border:0;background:var(--green2);color:#071c2e}
+    @keyframes spin{to{transform:rotate(360deg)}}
     @media(max-width:380px){.card{padding:24px 18px}.install-dialog form{padding:24px}}
     @media(prefers-reduced-motion:reduce){*{transition:none!important}}
   </style>
@@ -71,6 +78,15 @@
   </main>
 
   <div class="toast" id="toast">Pressione voltar novamente para sair</div>
+
+  <section class="launch-overlay" id="launchOverlay" role="dialog" aria-modal="true" aria-labelledby="launchTitle" hidden>
+    <div class="launch-panel">
+      <div class="launch-spinner" id="launchLoader" aria-hidden="true"></div>
+      <strong id="launchTitle">Abrindo a Central</strong>
+      <span class="launch-status" id="launchStatus" role="status" aria-live="polite">Abrindo seu ambiente…</span>
+      <button class="launch-retry" id="launchRetry" type="button" hidden>Tentar novamente</button>
+    </div>
+  </section>
 
   <dialog class="install-dialog" id="installDialog" aria-labelledby="installDialogTitle">
     <form method="dialog">
