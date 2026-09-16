@@ -105,9 +105,9 @@
 
   function openCentral(replaceHistory) {
     showLaunchOverlay();
-    window.setTimeout(function () {
-      navigateToCentral(replaceHistory);
-    }, prefersReducedMotion ? 0 : 180);
+    // Start the Apps Script navigation immediately; do not spend 180 ms on a
+    // client-side animation before the network request begins.
+    navigateToCentral(replaceHistory);
   }
 
   function instructionMarkup() {
@@ -222,8 +222,8 @@
       return;
     }
     if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey || event.button > 0) return;
-    event.preventDefault();
-    openCentral(false);
+    showLaunchOverlay();
+    // Keep native link navigation so the request starts without a JS delay.
   });
 
   launchRetry.addEventListener('click', function () {
