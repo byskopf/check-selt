@@ -3,6 +3,18 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <style>html.installed-launch{visibility:hidden}</style>
+  <script>
+    (function () {
+      var standalone = (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) ||
+        (window.matchMedia && window.matchMedia('(display-mode: fullscreen)').matches) ||
+        navigator.standalone === true;
+      if (standalone && navigator.onLine !== false) {
+        document.documentElement.classList.add('installed-launch');
+        window.location.replace('https://script.google.com/macros/s/AKfycbzo_WN_PzoRhS-LhV070vmE8GDr1vJX9qEa1iqxADe6kVhNZa968olZLVVDAtObmvE/exec');
+      }
+    }());
+  </script>
   <meta name="theme-color" content="#0b293d">
   <meta name="description" content="Localizador de Pisca, Localizador de Estrutura, comissionamento, pendências e relatórios PDF para linhas de transmissão.">
   <meta name="mobile-web-app-capable" content="yes">

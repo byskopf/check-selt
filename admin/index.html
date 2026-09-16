@@ -2,6 +2,18 @@
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8">
+  <style>html.installed-launch{visibility:hidden}</style>
+  <script>
+    (function () {
+      var standalone = (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) ||
+        (window.matchMedia && window.matchMedia('(display-mode: fullscreen)').matches) ||
+        navigator.standalone === true;
+      if (standalone && navigator.onLine !== false) {
+        document.documentElement.classList.add('installed-launch');
+        window.location.replace('https://script.google.com/macros/s/AKfycbxUC3NNE_SPW9NSzkgGXAbJC3kkX9XJtYCpY5CC0kZWFqtzUKDV99Vx0qoNtPoXtcxo/exec?central=admin');
+      }
+    }());
+  </script>
   <link rel="dns-prefetch" href="//script.google.com">
   <link rel="preconnect" href="https://script.google.com">
   <link rel="dns-prefetch" href="//script.googleusercontent.com">
