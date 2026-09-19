@@ -143,6 +143,30 @@ if (importedConfig && importedConfig[1] && configVersion && importedConfig[1] !=
   failures.push('A versão importada pelo sw.js deve corresponder à versão da Central.');
 }
 
+/* O atalho de quem já instalou é um location.replace escrito à mão no index.html, ou seja, uma
+   cópia solta do appUrl. Essa cópia ficou para trás e a Central instalada continuou abrindo uma
+   implantação antiga até 19/09/2026, sem nada acusar. A mesma regra já existe no validador do
+   aplicativo; aqui faltava. */
+const redirecionamentos = [...indexHtml.matchAll(/location\.(?:replace|assign)\(\s*["'](https:\/\/script\.google\.com[^"']*)["']/gi)];
+for (const achado of redirecionamentos) {
+  if (configAppUrl && achado[1] !== configAppUrl[1]) {
+    failures.push('A URL do redirecionamento em index.html está diferente do appUrl em app-config.js. Elas precisam ser iguais, senão a Central instalada abre outra implantação.');
+  }
+}
+
+/* A Central é só para o administrador: não entra em buscador nem é divulgada no portal. */
+if (!/<meta\s+name="robots"\s+content="noindex/i.test(indexHtml)) {
+  failures.push('index.html da Central deve ter <meta name="robots" content="noindex,nofollow">.');
+}
+const robots = await readFile('robots.txt', 'utf8').catch(() => '');
+if (!/^\s*Disallow:\s*\/admin\/\s*$/m.test(robots)) {
+  failures.push('robots.txt deve conter "Disallow: /admin/" — a Central não é divulgada.');
+}
+const hub = await readFile('index.html', 'utf8').catch(() => '');
+if (/\.\/admin\/|check-selt\/admin\//.test(hub)) {
+  failures.push('O portal (index.html da raiz) não deve linkar nem compartilhar a Central.');
+}
+
 const packageJson = JSON.parse(await readFile('package.json', 'utf8').catch(() => '{}'));
 if (configVersion && packageJson.version !== configVersion[1]) {
   failures.push('A versão do package.json deve corresponder à versão da Central.');

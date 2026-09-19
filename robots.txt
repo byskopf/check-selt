@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /admin/
 
 Sitemap: https://byskopf.github.io/check-selt/sitemap.xml
