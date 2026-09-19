@@ -1,15 +1,13 @@
-# CHECK-SE/LT — portais PWA
+# CHECK-SELT — portal PWA
 
-Este repositório contém o portal CHECK-SE/LT, o PWA do CHECK-LT e o PWA da
-Central Administrativa. Os ambientes operacionais continuam no Google Apps
+Este repositório contém o portal oficial CHECK-SELT, que reúne as funções de subestações e linhas de transmissão, além da Central Administrativa. Os ambientes operacionais continuam no Google Apps
 Script; estes arquivos cuidam da instalação, abertura, atualização e capa
 offline dos portais.
 
 ## Estrutura
 
-- `lt/`: CHECK-LT, com cache e ícones próprios.
+- `lt/`: aplicativo CHECK-SELT, com cache e ícones próprios.
 - `admin/`: Central Administrativa, com cache, atualização assistida e modo offline próprios.
-- `se/`: acesso compatível que encaminha ao portal oficial do CHECK-SE.
 - `scripts/`: verificações automáticas dos PWAs.
 
 ## Validar

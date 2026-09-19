@@ -1,4 +1,4 @@
-name: Validar CHECK-LT PWA
+name: Validar CHECK-SELT PWA
 
 on:
   push:
@@ -31,7 +31,7 @@ jobs:
         with:
           node-version: 22
 
-      - name: Validar estrutura do CHECK-LT
+      - name: Validar estrutura do CHECK-SELT
         run: node scripts/validate-lt-pwa.mjs
 
       - name: Validar sintaxe JavaScript
