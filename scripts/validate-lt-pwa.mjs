@@ -73,11 +73,27 @@ for (const reference of ['manifest.json', 'app-config.js', 'app.js', 'styles.css
 for (const element of ['installButton', 'openButton', 'installDialog', 'launchOverlay']) {
   if (!indexHtml.includes(`id="${element}"`)) failures.push(`Portal perdeu o elemento obrigatório ${element}.`);
 }
+const configSource = await readFile(base + 'app-config.js', 'utf8').catch(() => '');
 if (/<meta[^>]+http-equiv=["']refresh["']/i.test(indexHtml)) {
   failures.push('index.html não pode voltar a usar redirecionamento automático por meta refresh.');
 }
-if (/location\.(replace|assign)\(["']https:\/\/script\.google\.com/i.test(indexHtml)) {
-  failures.push('index.html não pode redirecionar diretamente ao Apps Script. Use o portal instalável.');
+/* Redirecionar direto para o Apps Script é proibido SEMPRE que for incondicional: isso tiraria a página
+   instalável do ar (o navegador nunca mostraria o convite de instalação). O que é permitido é o atalho para
+   quem JÁ instalou: um redirecionamento dentro de uma verificação de display-mode/standalone.
+   E, se ele existir, a URL escrita ali precisa ser a MESMA do app-config.js — duplicata solta já fez o portal
+   apontar para uma implantação velha antes (setembro/2026). */
+const redirecionamentos = [...indexHtml.matchAll(/location\.(?:replace|assign)\(\s*["'](https:\/\/script\.google\.com[^"']*)["']/gi)];
+if (redirecionamentos.length) {
+  const trechoGuardado = /display-mode:\s*standalone|navigator\.standalone/i.test(indexHtml);
+  if (!trechoGuardado) {
+    failures.push('index.html só pode redirecionar ao Apps Script para quem já instalou (verificação de display-mode/standalone). Redirecionamento incondicional tira a instalação do ar.');
+  }
+  const urlDoConfig = configSource.match(/appUrl:\s*['"]([^'"]+)['"]/);
+  redirecionamentos.forEach(function (achado) {
+    if (urlDoConfig && achado[1] !== urlDoConfig[1]) {
+      failures.push('A URL do redirecionamento em index.html está diferente do appUrl em app-config.js. Elas precisam ser iguais, senão o atalho instalado abre outra implantação.');
+    }
+  });
 }
 for (const meta of [
   'property="og:image:type" content="image/jpeg"',
@@ -90,7 +106,7 @@ if (!indexHtml.includes('CHECK-SELT | Subestações e linhas de transmissão')) 
   failures.push('Título oficial do CHECK-SELT ausente no index.html.');
 }
 
-const configSource = await readFile(base + 'app-config.js', 'utf8').catch(() => '');
+
 const configVersion = configSource.match(/version:\s*['\"]([^'\"]+)['\"]/);
 const configAppUrl = configSource.match(/appUrl:\s*['\"]([^'\"]+)['\"]/);
 const configIconVersion = configSource.match(/iconVersion:\s*['"]([^'"]+)['"]/);
