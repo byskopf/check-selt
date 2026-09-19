@@ -24,11 +24,11 @@ jobs:
             echo "::error::Portal CHECK-LT respondeu HTTP $status."
             exit 1
           fi
-          if ! grep -q "CHECK-LT" /tmp/portal.html; then
-            echo "::error::Portal não contém a identificação CHECK-LT."
+          if ! grep -Eqi "CHECK-(LT|SELT)" /tmp/portal.html; then
+            echo "::error::Portal não contém a identificação CHECK-LT/CHECK-SELT."
             exit 1
           fi
-          if ! grep -q "Instalar aplicativo" /tmp/portal.html; then
+          if ! grep -qi "Instalar aplicativo" /tmp/portal.html; then
             echo "::error::Portal perdeu o fluxo de instalação do aplicativo."
             exit 1
           fi
