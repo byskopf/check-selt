@@ -1,6 +1,7 @@
-/* Configuração única da Central Administrativa CHECK-SE / CHECK-LT. */
+/* Configuração única da Central Administrativa CHECK-SELT.
+   Desde 19/09/2026 a URL de produção do projeto abre a Central direto (o app de campo saiu dali). */
 var CHECK_ADMIN_CONFIG = Object.freeze({
-  version: '1.1.2',
+  version: '1.2.0',
   iconVersion: '20260915',
-  appUrl: 'https://script.google.com/macros/s/AKfycbxUC3NNE_SPW9NSzkgGXAbJC3kkX9XJtYCpY5CC0kZWFqtzUKDV99Vx0qoNtPoXtcxo/exec?central=admin'
+  appUrl: 'https://script.google.com/macros/s/AKfycbx7ReYi1OoXTvO2e-FLXczg-Ube0WZcjJSWe8HGlWbQtUof1F-1dOUQ-kqrwZQPjb6D/exec'
 });

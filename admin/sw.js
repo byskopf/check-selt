@@ -1,5 +1,5 @@
 /* Service Worker da Central Administrativa CHECK */
-importScripts('app-config.js?v=1.1.2');
+importScripts('app-config.js?v=1.2.0');
 
 var PWA_VERSION = self.CHECK_ADMIN_CONFIG && self.CHECK_ADMIN_CONFIG.version;
 var ICON_VERSION = self.CHECK_ADMIN_CONFIG && self.CHECK_ADMIN_CONFIG.iconVersion || PWA_VERSION;

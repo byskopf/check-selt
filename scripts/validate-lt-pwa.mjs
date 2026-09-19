@@ -50,8 +50,8 @@ if (manifest) {
       failures.push(`Campo obrigatório ausente no manifest.json: ${field}`);
     }
   }
-  if (manifest.name !== 'CHECK-LT' || manifest.short_name !== 'CHECK-LT') {
-    failures.push('O manifest deve identificar o aplicativo como CHECK-LT.');
+  if (manifest.name !== 'CHECK-SELT' || manifest.short_name !== 'CHECK-SELT') {
+    failures.push('O manifest deve identificar o aplicativo como CHECK-SELT.');
   }
   if (manifest.id !== '/check-selt/lt/' || !['./', '/check-selt/lt/'].includes(manifest.scope)) {
     failures.push('O CHECK-LT deve manter identidade e escopo próprios em /check-selt/lt/.');
@@ -86,8 +86,8 @@ for (const meta of [
 ]) {
   if (!indexHtml.includes(meta)) failures.push('Metadado obrigatório ausente: ' + meta);
 }
-if (!indexHtml.includes('CHECK-LT | Ferramentas e gestão de linhas de transmissão')) {
-  failures.push('Título oficial do CHECK-LT ausente no index.html.');
+if (!indexHtml.includes('CHECK-SELT | Subestações e linhas de transmissão')) {
+  failures.push('Título oficial do CHECK-SELT ausente no index.html.');
 }
 
 const configSource = await readFile(base + 'app-config.js', 'utf8').catch(() => '');

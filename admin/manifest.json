@@ -1,8 +1,8 @@
 {
   "id": "/check-selt/admin/",
-  "name": "Central Administrativa CHECK",
-  "short_name": "CHECK Admin",
-  "description": "Central Administrativa do CHECK-SE e CHECK-LT",
+  "name": "Central Administrativa CHECK-SELT",
+  "short_name": "CHECK-SELT Admin",
+  "description": "Central Administrativa do CHECK-SELT",
   "lang": "pt-BR",
   "start_url": "/check-selt/admin/?origem=pwa",
   "scope": "/check-selt/admin/",

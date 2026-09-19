@@ -1,8 +1,8 @@
 {
   "id": "/check-selt/lt/",
-  "name": "CHECK-LT",
-  "short_name": "CHECK-LT",
-  "description": "Ferramentas e gestão de linhas de transmissão: Localizador de Pisca, consulta de estruturas, comissionamento, pendências e relatórios PDF.",
+  "name": "CHECK-SELT",
+  "short_name": "CHECK-SELT",
+  "description": "Aplicativo de campo para subestações e linhas de transmissão: obras, comissionamento, pendências, localizadores e relatórios PDF.",
   "lang": "pt-BR",
   "start_url": "/check-selt/lt/?origem=pwa",
   "scope": "/check-selt/lt/",
@@ -22,9 +22,9 @@
   ],
   "shortcuts": [
     {
-      "name": "Abrir CHECK-LT",
+      "name": "Abrir CHECK-SELT",
       "short_name": "Abrir",
-      "description": "Abrir o ambiente do CHECK-LT",
+      "description": "Abrir o ambiente do CHECK-SELT",
       "url": "./?abrir=1",
       "icons": [{ "src": "icon-192.png?v=20260915", "sizes": "192x192", "type": "image/png" }]
     }
