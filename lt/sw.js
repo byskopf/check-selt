@@ -1,5 +1,5 @@
 /* Service Worker for CHECK-SELT */
-importScripts('app-config.js?v=1.1.0');
+importScripts('app-config.js?v=1.2.0');
 var PWA_VERSION = self.CHECK_LT_CONFIG && self.CHECK_LT_CONFIG.version;
 var ICON_VERSION = self.CHECK_LT_CONFIG && self.CHECK_LT_CONFIG.iconVersion || PWA_VERSION;
 if (!PWA_VERSION) throw new Error('Versão do CHECK-SELT não configurada.');

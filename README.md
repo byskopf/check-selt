@@ -8,7 +8,9 @@ offline dos portais.
 
 - `lt/`: aplicativo CHECK-SELT, com cache e ícones próprios.
 - `admin/`: Central Administrativa, com cache, atualização assistida e modo offline próprios.
-- `scripts/`: verificações automáticas dos PWAs.
+- `scripts/`: verificações automáticas dos PWAs e `gerar-icones.mjs`, que regera os ícones do
+  aplicativo a partir dos SVG em `lt/`. Depois de editar um SVG, rode-o e suba o `iconVersion`
+  em `lt/app-config.js` — sem isso o validador reprova e quem já instalou fica com o ícone velho.
 
 ## Validar
 

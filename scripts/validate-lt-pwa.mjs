@@ -1,5 +1,6 @@
 import { access, readFile } from 'node:fs/promises';
 import { constants } from 'node:fs';
+import { createHash } from 'node:crypto';
 
 const base = 'lt/';
 const requiredFiles = [
@@ -131,6 +132,37 @@ if (manifest && configIconVersion) {
     failures.push('O ícone Apple Touch deve usar a mesma versão de ícones.');
   }
 }
+
+/* Os PNG do PWA sao gerados dos SVG por scripts/gerar-icones.mjs. Nada garantia que eles
+   estivessem em dia: o aplicativo chegou a ficar com a torre do CHECK-LT depois de virar
+   CHECK-SELT, porque o icone publicado era o antigo e nenhuma verificacao olhava para isso.
+   O lock guarda o hash de cada fonte; se um SVG mudou e os icones nao foram regerados, aqui
+   reprova. Tambem confere o tamanho real de cada PNG lendo o cabecalho, sem precisar de
+   navegador na CI. */
+const lockBruto = await readFile(base + 'icones.lock.json', 'utf8').catch(() => '');
+if (!lockBruto) {
+  failures.push('Falta lt/icones.lock.json - rode: node scripts/gerar-icones.mjs');
+} else {
+  let lock = null;
+  try { lock = JSON.parse(lockBruto); } catch { failures.push('lt/icones.lock.json nao e JSON valido.'); }
+  for (const [caminho, hashGravado] of Object.entries((lock && lock.fontes) || {})) {
+    const svg = await readFile(caminho).catch(() => null);
+    if (!svg) { failures.push('Fonte de icone ausente: ' + caminho); continue; }
+    const hashAtual = createHash('sha256').update(svg).digest('hex').slice(0, 16);
+    if (hashAtual !== hashGravado) {
+      failures.push(caminho + ' mudou e os icones nao foram regerados - rode: node scripts/gerar-icones.mjs');
+    }
+  }
+}
+for (const [arquivo, lado] of [['icon-192.png', 192], ['icon-512.png', 512], ['icon-maskable-192.png', 192], ['icon-maskable-512.png', 512], ['apple-touch-icon.png', 180]]) {
+  const png = await readFile(base + arquivo).catch(() => null);
+  if (!png) continue;
+  const largura = png.readUInt32BE(16), altura = png.readUInt32BE(20);
+  if (largura !== lado || altura !== lado) {
+    failures.push(arquivo + ' deveria ter ' + lado + 'x' + lado + ' e tem ' + largura + 'x' + altura + '.');
+  }
+}
+
 
 if (!configVersion || !/^\d+\.\d+\.\d+$/.test(configVersion[1])) {
   failures.push('app-config.js deve declarar uma versão semântica válida.');

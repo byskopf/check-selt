@@ -1,4 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <!-- Versão "maskable": o Android recorta o ícone em círculo, losango ou squircle conforme o
+       aparelho. Por isso o fundo é inteiro (sem cantos arredondados) e a marca vem reduzida a
+       82%, para caber com folga na zona segura (círculo central de 80% do lado). -->
   <defs>
     <radialGradient id="bg" cx="50%" cy="38%" r="72%">
       <stop stop-color="#174b70"/>
@@ -7,10 +10,9 @@
   </defs>
   <rect width="512" height="512" fill="url(#bg)"/>
   <circle cx="256" cy="256" r="176" fill="#ffffff" opacity=".045"/>
-  <g fill="none" stroke="#f4f8fb" stroke-width="18" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M229 126h54l27 92H202z"/>
-    <path d="M185 218h142M165 282h182M146 354h220"/>
-    <path d="M202 218 158 397M310 218l44 179M256 126v271"/>
+  <g transform="translate(256 256) scale(.82) translate(-256 -256)">
+    <rect x="151" y="143" width="210" height="226" rx="25" fill="none" stroke="#f4f8fb" stroke-width="25"/>
+    <path d="m192 255 59 59 83-101" fill="none" stroke="#5ce0a8" stroke-width="34" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M256 72v71M256 369v71" fill="none" stroke="#f4f8fb" stroke-width="25" stroke-linecap="round"/>
   </g>
-  <path d="m204 305 38 38 70-86" fill="none" stroke="#5ce0a8" stroke-width="27" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
