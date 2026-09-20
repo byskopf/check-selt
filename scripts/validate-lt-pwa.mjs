@@ -103,7 +103,7 @@ for (const meta of [
 ]) {
   if (!indexHtml.includes(meta)) failures.push('Metadado obrigatório ausente: ' + meta);
 }
-if (!indexHtml.includes('CHECK-SELT | Subestações e linhas de transmissão')) {
+if (!indexHtml.includes('CHECK-SELT | Subestações, linhas e distribuição')) {
   failures.push('Título oficial do CHECK-SELT ausente no index.html.');
 }
 

@@ -5,102 +5,42 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="google-site-verification" content="l9FXF1if1u2_aIgaA07pWWLaH3MpQh8sEuIshI9_0Tk">
   <meta name="theme-color" content="#081f31">
-  <meta name="description" content="CHECK-SELT: obras, comissionamento, pendências e localizadores de subestações e linhas de transmissão em um só aplicativo.">
-  <title>CHECK-SELT | Subestações e linhas de transmissão</title>
-  <link rel="canonical" href="https://byskopf.github.io/check-selt/">
+  <meta name="description" content="CHECK-SELT: obras, comissionamento, pendências e localizadores de subestações, linhas de transmissão e distribuição, em um só aplicativo.">
+  <title>CHECK-SELT | Subestações, linhas e distribuição</title>
+  <!-- Existe UMA página só: /lt/. Esta é apenas a porta curta (byskopf.github.io/check-selt/):
+       encaminha quem abre no navegador e guarda as tags de compartilhamento, que o WhatsApp lê sem
+       executar JavaScript. A canônica aponta para /lt/ para o Google juntar tudo num resultado. -->
+  <link rel="canonical" href="https://byskopf.github.io/check-selt/lt/">
 
   <meta property="og:locale" content="pt_BR">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="CHECK-SELT">
-  <meta property="og:title" content="CHECK-SELT | Subestações e linhas de transmissão">
-  <meta property="og:description" content="CHECK-SELT: obras, comissionamento, pendências e localizadores de subestações e linhas de transmissão em um só aplicativo.">
+  <meta property="og:title" content="CHECK-SELT | Subestações, linhas e distribuição">
+  <meta property="og:description" content="Obras, comissionamento e pendências, com Localizador de Pisca, de Estrutura e de Equipamento, e verificação de Gibi e Cesto.">
   <meta property="og:url" content="https://byskopf.github.io/check-selt/">
-  <meta property="og:image" content="https://byskopf.github.io/check-selt/og-check-selt-20260920.jpg">
-  <meta property="og:image:secure_url" content="https://byskopf.github.io/check-selt/og-check-selt-20260920.jpg">
+  <meta property="og:image" content="https://byskopf.github.io/check-selt/og-check-selt-20260920b.jpg">
+  <meta property="og:image:secure_url" content="https://byskopf.github.io/check-selt/og-check-selt-20260920b.jpg">
   <meta property="og:image:type" content="image/jpeg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="CHECK-SELT — Subestações e linhas de transmissão">
+  <meta property="og:image:alt" content="CHECK-SELT — Subestações, linhas de transmissão e distribuição">
 
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="CHECK-SELT | Subestações e linhas de transmissão">
-  <meta name="twitter:description" content="CHECK-SELT: obras, comissionamento, pendências e localizadores de subestações e linhas de transmissão em um só aplicativo.">
-  <meta name="twitter:image" content="https://byskopf.github.io/check-selt/og-check-selt-20260920.jpg">
-  <style>
-    :root{color-scheme:dark;--navy:#081f31;--surface:#0d2b42;--line:rgba(255,255,255,.11);--text:#f4f8fb;--muted:#a9bac7;--green:#5ce0a8;--amber:#ffc45c}
-    *{box-sizing:border-box}
-    html{min-height:100%;background:var(--navy)}
-    body{min-height:100vh;margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--text);background:
-      radial-gradient(circle at 12% 4%,rgba(92,224,168,.15),transparent 34rem),
-      radial-gradient(circle at 92% 94%,rgba(70,151,207,.17),transparent 30rem),var(--navy)}
-    body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.18;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:38px 38px}
-    .shell{position:relative;width:min(100% - 32px,920px);min-height:100vh;margin:auto;padding:max(34px,env(safe-area-inset-top)) 0 max(28px,env(safe-area-inset-bottom));display:flex;flex-direction:column;justify-content:center}
-    header{text-align:center;margin-bottom:34px}
-    .mark{width:72px;height:72px;margin:0 auto 18px;display:grid;place-items:center;border:1px solid rgba(92,224,168,.33);border-radius:22px;background:linear-gradient(145deg,rgba(92,224,168,.18),rgba(255,255,255,.04));box-shadow:0 18px 55px rgba(0,0,0,.25)}
-    .mark svg{width:39px;fill:none;stroke:var(--green);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
-    h1{margin:0;font-size:clamp(2.25rem,8vw,4rem);line-height:1;letter-spacing:-.055em}
-    h1 span{font-weight:430} h1 strong{color:var(--green);font-weight:900}
-    header p{max-width:570px;margin:14px auto 0;color:var(--muted);font-size:1.02rem;line-height:1.55}
-    .systems{display:grid;grid-template-columns:minmax(0,1fr);gap:18px;max-width:460px;margin:0 auto;width:100%}
-    .card{min-height:260px;padding:26px;display:flex;flex-direction:column;border:1px solid var(--line);border-radius:24px;background:linear-gradient(145deg,rgba(255,255,255,.075),rgba(255,255,255,.025));box-shadow:0 20px 55px rgba(0,0,0,.19);transition:transform .2s ease,border-color .2s ease,background .2s ease}
-    .card:hover{transform:translateY(-3px);border-color:rgba(92,224,168,.36);background:linear-gradient(145deg,rgba(255,255,255,.095),rgba(255,255,255,.035))}
-    .card-top{display:flex;align-items:center;justify-content:space-between;gap:16px}
-    .card-icon{width:48px;height:48px;display:grid;place-items:center;border-radius:15px;background:rgba(92,224,168,.12);color:var(--green)}
-    .card-icon svg{width:25px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
-    .status{padding:6px 10px;border-radius:999px;background:rgba(92,224,168,.12);color:var(--green);font-size:.76rem;font-weight:800;letter-spacing:.02em}
-    .status.soon{background:rgba(255,196,92,.12);color:var(--amber)}
-    h2{margin:24px 0 8px;font-size:1.7rem;letter-spacing:-.035em}
-    .card p{margin:0 0 24px;color:var(--muted);line-height:1.5}
-    .button{margin-top:auto;min-height:50px;padding:0 17px;border-radius:14px;display:flex;align-items:center;justify-content:space-between;gap:12px;text-decoration:none;font-weight:850;background:var(--green);color:#062034}
-    .button svg{width:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-    .button.secondary{border:1px solid rgba(255,196,92,.25);background:rgba(255,196,92,.08);color:var(--amber)}
-    footer{margin-top:30px;text-align:center;color:#8295a4;font-size:.84rem}
-    @media(max-width:650px){.shell{justify-content:flex-start;padding-top:42px}.systems{grid-template-columns:1fr}.card{min-height:230px}header{margin-bottom:26px}}
-    @media(prefers-reduced-motion:reduce){.card{transition:none}}
-    .feature-list{padding:0;margin:0 0 26px;list-style:none;color:#d5e2ec;line-height:1.6;font-size:.94rem}
-    .feature-list li{padding:8px 0 8px 22px;position:relative}.feature-list li:before{content:"✓";position:absolute;left:0;color:var(--green)}
-    .card p{margin-bottom:12px;min-height:48px}.card h2{font-weight:700}.status,.button{font-weight:600}
-    .share-button{padding:12px 8px;margin-top:10px;background:none;border:0;color:#bdf3d9;font:inherit;font-size:.86rem;font-weight:600;cursor:pointer}
-    .share-button[hidden]{display:none}.share-button:hover{text-decoration:underline}.share-button:focus-visible{outline:2px solid var(--green);outline-offset:3px;border-radius:8px}
-    .share-portal{text-align:center;margin-top:26px;padding-top:16px;border-top:1px solid var(--line)}.share-portal p{color:var(--muted);font-size:.9rem;margin:8px}.share-portal button{border:1px solid rgba(92,224,168,.28);padding:12px 20px;border-radius:12px}
-    #shareStatus:empty{display:none}header p{max-width:670px}
-  </style>
+  <meta name="twitter:title" content="CHECK-SELT | Subestações, linhas e distribuição">
+  <meta name="twitter:description" content="Obras, comissionamento e pendências, com Localizador de Pisca, de Estrutura e de Equipamento, e verificação de Gibi e Cesto.">
+  <meta name="twitter:image" content="https://byskopf.github.io/check-selt/og-check-selt-20260920b.jpg">
+
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"WebSite","name":"CHECK-SELT","url":"https://byskopf.github.io/check-selt/","description":"Obras, comissionamento, pendências e localizadores de subestações e linhas de transmissão em um só aplicativo.","inLanguage":"pt-BR"}
+  {"@context":"https://schema.org","@type":"WebSite","name":"CHECK-SELT","url":"https://byskopf.github.io/check-selt/","description":"CHECK-SELT: obras, comissionamento, pendências e localizadores de subestações, linhas de transmissão e distribuição, em um só aplicativo.","inLanguage":"pt-BR"}
   </script>
+  <script>location.replace('./lt/' + location.search + location.hash);</script>
+  <style>
+    html{background:#081f31}
+    body{margin:0;min-height:100vh;display:grid;place-items:center;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:#f4f8fb;text-align:center}
+    a{color:#5ce0a8;font-weight:700}
+  </style>
 </head>
 <body>
-  <main class="shell">
-    <header>
-      <div class="mark" aria-hidden="true">
-        <svg viewBox="0 0 48 48"><rect x="10" y="9" width="28" height="30" rx="4"/><path d="m16 24 5 5 11-12M24 3v6m0 30v6"/></svg>
-      </div>
-      <h1><span>CHECK-</span><strong>SELT</strong></h1>
-      <p>Subestações e linhas de transmissão.<br>Obras, comissionamento e localizadores, em um aplicativo só.</p>
-    </header>
-
-    <section class="systems" aria-label="Aplicativo disponível">
-      <article class="card">
-        <div class="card-top">
-          <div class="card-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24"><path d="M4 20h16M6 20V9l6-5 6 5v11M9 20v-5h6v5M9 11h.01M15 11h.01"/></svg>
-          </div>
-          <span class="status">Disponível</span>
-        </div>
-        <h2>CHECK-SELT</h2>
-        <p>Aplicativo de campo: subestações e linhas de transmissão.</p><ul class="feature-list"><li>Obras, comissionamento e pendências</li><li>Localizador de Pisca e de Estrutura</li><li>Correções da prestadora e relatórios PDF</li></ul>
-        <a class="button" href="./lt/" aria-label="Acessar o CHECK-SELT">
-          <span>Acessar CHECK-SELT</span>
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-5-5 5 5-5 5"/></svg>
-        </a>
-        <button class="share-button" type="button" hidden data-share-title="CHECK-SELT" data-share-url="https://byskopf.github.io/check-selt/lt/">Compartilhar este sistema</button>
-      </article>
-
-    </section>
-
-    <div class="share-portal"><p>Leve o acesso para sua equipe.</p><button class="share-button" type="button" hidden data-share-title="CHECK-SELT" data-share-url="https://byskopf.github.io/check-selt/">Compartilhar o portal</button><p id="shareStatus" role="status" aria-live="polite"></p></div>
-    <footer>Portal oficial CHECK-SELT · Acesso no celular e no computador</footer>
-    <script src="share.js" defer></script>
-  </main>
+  <p>Abrindo o CHECK-SELT…<br><a href="./lt/">Toque aqui se não abrir sozinho</a></p>
 </body>
 </html>
