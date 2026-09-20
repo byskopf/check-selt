@@ -61,7 +61,53 @@
   </style>
   <script src="app-config.js" defer></script>
   <script src="app.js" defer></script>
-<style>.portal-links{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:22px}.portal-links a,.portal-links button{color:#bdf3d9;font:inherit;font-size:.82rem;font-weight:600;background:none;border:1px solid rgba(92,224,168,.22);padding:10px 12px;border-radius:10px;text-decoration:none;cursor:pointer}.portal-links button[hidden]{display:none}.share-status{font-size:.82rem;line-height:1.5;color:#b8c7d5;text-align:center}.wordmark p{line-height:1.6;letter-spacing:.08em;font-weight:600}</style>
+<style>.portal-links{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:22px}.portal-links a,.portal-links button{color:#bdf3d9;font:inherit;font-size:.82rem;font-weight:600;background:none;border:1px solid rgba(92,224,168,.22);padding:10px 12px;border-radius:10px;text-decoration:none;cursor:pointer}.portal-links button[hidden]{display:none}.share-status{font-size:.82rem;line-height:1.5;color:#b8c7d5;text-align:center}.wordmark p{line-height:1.6;letter-spacing:.08em;font-weight:600}    .update-banner {
+      position: fixed;
+      z-index: 30;
+      left: 50%;
+      bottom: max(16px, env(safe-area-inset-bottom));
+      width: min(calc(100% - 28px), 460px);
+      min-height: 52px;
+      padding: 9px 10px 9px 15px;
+      border: 1px solid rgba(92,224,168,.34);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      transform: translateX(-50%);
+      background: #102d46;
+      color: #e7f2f8;
+      box-shadow: 0 16px 40px rgba(0,0,0,.38);
+      font-size: .84rem;
+      font-weight: 700;
+    }
+    .update-banner[hidden] { display: none; }
+    .update-banner button {
+      flex: 0 0 auto;
+      min-height: 36px;
+      padding: 7px 13px;
+      border: 0;
+      border-radius: 10px;
+      cursor: pointer;
+      background: #5ce0a8;
+      color: #071c2e;
+      font-weight: 850;
+    }
+    .update-banner button:disabled { opacity: .7; cursor: wait; }
+    .launch-retry {
+      min-height: 44px;
+      margin-top: 4px;
+      padding: 10px 16px;
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 12px;
+      cursor: pointer;
+      background: rgba(255,255,255,.07);
+      color: #f4f8fb;
+      font-weight: 800;
+    }
+    .launch-retry[hidden] { display: none; }
+</style>
 </head>
 <body>
   <div class="ambient ambient-one" aria-hidden="true"></div>
