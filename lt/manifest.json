@@ -2,7 +2,7 @@
   "id": "/check-selt/lt/",
   "name": "CHECK-SELT",
   "short_name": "CHECK-SELT",
-  "description": "Aplicativo de campo para subestações e linhas de transmissão: obras, comissionamento, pendências, localizadores e relatórios PDF.",
+  "description": "Aplicativo de campo para subestações, linhas de transmissão e distribuição: comissionamento, pendências, localizadores e ferramentas de cálculo.",
   "lang": "pt-BR",
   "start_url": "/check-selt/lt/?origem=pwa",
   "scope": "/check-selt/lt/",
