@@ -51,8 +51,10 @@ if (manifest) {
       failures.push(`Campo obrigatório ausente no manifest.json: ${field}`);
     }
   }
-  if (manifest.name !== 'CHECK-SELT' || manifest.short_name !== 'CHECK-SELT') {
-    failures.push('O manifest deve identificar o aplicativo como CHECK-SELT.');
+  /* Desde 04/10/2026 (1.9.0, decisão "2a" dele) este é o ícone ANTIGO: o app novo é instalado pelo checkselt.com (ícone
+     verde). O nome na tela inicial diz isso, para a pessoa saber qual remover. */
+  if (manifest.name !== 'CHECK-SELT antigo' || manifest.short_name !== 'SELT antigo') {
+    failures.push('O manifest deve identificar este aplicativo como o antigo: name "CHECK-SELT antigo" e short_name "SELT antigo".');
   }
   if (manifest.id !== '/check-selt/lt/' || !['./', '/check-selt/lt/'].includes(manifest.scope)) {
     failures.push('O CHECK-LT deve manter identidade e escopo próprios em /check-selt/lt/.');
