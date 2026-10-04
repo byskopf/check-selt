@@ -1,5 +1,5 @@
 /* Service Worker for CHECK-SELT */
-importScripts('app-config.js?v=1.7.0');
+importScripts('app-config.js?v=1.8.0');
 var PWA_VERSION = self.CHECK_LT_CONFIG && self.CHECK_LT_CONFIG.version;
 var ICON_VERSION = self.CHECK_LT_CONFIG && self.CHECK_LT_CONFIG.iconVersion || PWA_VERSION;
 if (!PWA_VERSION) throw new Error('Versão do CHECK-SELT não configurada.');
@@ -20,7 +20,11 @@ var APP_SHELL = [
   'icon-512.png',
   'icon-maskable-192.png',
   'icon-maskable-512.png',
-  'apple-touch-icon.png'
+  'apple-touch-icon.png',
+  /* 04/10/2026 (1.8.0): o index.html pede os scripts com ?v=<versão>, e o cache é por URL completa. Sem estas
+     duas, o portal aberto sem sinal logo depois de atualizar ficaria sem o app.js. */
+  'app-config.js?v=' + PWA_VERSION,
+  'app.js?v=' + PWA_VERSION
 ].map(function (name) {
   var assetUrl = new URL(name, scopeBase);
   if (/^(?:icon-|apple-touch-icon)/.test(name)) {

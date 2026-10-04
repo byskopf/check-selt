@@ -191,6 +191,28 @@ if (appJavaScript.includes('script.google.com/macros/s/')) {
   failures.push('app.js não deve repetir a URL do Apps Script; use app-config.js.');
 }
 
+/* 04/10/2026 (PWA 1.8.0, V5.6 do app): quem abre o app por este portal leva a marca de=pwa-antigo, para o app
+   oferecer a ida ao checkselt.com (o site embute o app em outro armazenamento) quando não houver nada aguardando
+   sinal. A marca entra nos DOIS lugares que abrem o app — o redirecionamento do ícone instalado (index.html) e
+   o app.js — porque os dois disputam a mesma navegação; se um perder a marca, o outro pode vencer sem ela.
+   Confere o código (o push da marca), não o texto solto: os comentários também falam em de=pwa-antigo. */
+const pushDaMarca = /\.push\(\s*['"]de=pwa-antigo['"]\s*\)/;
+if (!pushDaMarca.test(indexHtml)) {
+  failures.push('index.html perdeu a marca de=pwa-antigo no redirecionamento do ícone instalado.');
+}
+if (!pushDaMarca.test(appJavaScript) || !/APP_URL\s*=\s*c\.appUrl\s*\+\s*consultaDoApp\(\)/.test(appJavaScript)) {
+  failures.push('app.js deve abrir o app com a marca de=pwa-antigo (APP_URL=c.appUrl+consultaDoApp()).');
+}
+/* E os scripts do index.html vão com ?v= igual à versão: sem isso, no primeiro lançamento depois de publicar,
+   o app.js velho do cache do service worker abre o app sem a marca. */
+for (const script of ['app-config.js', 'app.js']) {
+  const achado = indexHtml.match(new RegExp('<script[^>]+src=["\']' + script.replace('.', '\\.') + '\\?v=([^"\']+)["\']'));
+  if (!achado) failures.push('index.html deve carregar ' + script + ' com ?v=<versão do app-config.js>.');
+  else if (configVersion && achado[1] !== configVersion[1]) {
+    failures.push('O ?v= de ' + script + ' no index.html deve ser igual à versão do app-config.js.');
+  }
+}
+
 const serviceWorker = await readFile(base + 'sw.js', 'utf8').catch(() => '');
 if (!serviceWorker.includes('ICON_VERSION') || !serviceWorker.includes('iconVersion')) {
   failures.push('O Service Worker deve pré-carregar os ícones usando a versão configurada.');

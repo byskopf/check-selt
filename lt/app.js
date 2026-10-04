@@ -1,7 +1,9 @@
 (function(){
 'use strict';
 var c=window.CHECK_LT_CONFIG;if(!c||!c.version||!c.appUrl)throw new Error('Configuração do CHECK-SELT ausente ou inválida.');
-var APP_URL=c.appUrl,deferred=null,reg=null,reloadAfterUpdate=false,slowTimer=null;
+/* 04/10/2026 (V5.6): todo caminho que abre o app daqui ("Continuar sem instalar", "Tentar novamente", o atalho ?abrir=1, a janela que vira app) leva a marca de=pwa-antigo — é o mesmo armazenamento do ícone antigo, e o app só oferece a ida ao checkselt.com quando não há nada aguardando sinal. Mesma regra do redirecionamento do index.html: tira origem/abrir/de (pares crus, sem recodificar), acrescenta a marca, descarta o hash. */
+function consultaDoApp(){var partes=String(location.search||'').replace(/^\?/,'').split('&').filter(function(p){var k=p.split('=')[0];return p&&k!=='origem'&&k!=='abrir'&&k!=='de'});partes.push('de=pwa-antigo');return '?'+partes.join('&')}
+var APP_URL=c.appUrl+consultaDoApp(),deferred=null,reg=null,reloadAfterUpdate=false,slowTimer=null;
 var $=function(id){return document.getElementById(id)};
 var installButton=$('installButton'),installButtonText=$('installButtonText'),installHint=$('installHint'),openButton=$('openButton'),openButtonText=$('openButtonText'),introText=$('introText'),connectionBanner=$('connectionBanner'),connectionText=$('connectionText'),updateBanner=$('updateBanner'),updateText=$('updateText'),updateButton=$('updateButton'),launchOverlay=$('launchOverlay'),launchStatus=$('launchStatus'),launchLoader=$('launchLoader'),launchRetry=$('launchRetry'),installDialog=$('installDialog'),installInstructions=$('installInstructions');
 var ua=navigator.userAgent||'',isIPadOS=navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1,isIOS=/iphone|ipad|ipod/i.test(ua)||isIPadOS,isAndroid=/android/i.test(ua),reduced=!!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches),standalone=!!((window.matchMedia&&(window.matchMedia('(display-mode: standalone)').matches||window.matchMedia('(display-mode: fullscreen)').matches||window.matchMedia('(display-mode: minimal-ui)').matches))||navigator.standalone===true);
@@ -30,7 +32,8 @@ function instructions(){
     return '<p>No Chrome do Android:</p><ol class="install-steps"><li>Toque nos três pontos ⋮ no canto superior.</li><li>Escolha “Instalar app” ou “Adicionar à tela inicial”.</li><li>Toque em “Instalar” para criar o ícone.</li></ol>';
   }
   return '<p>Para instalar neste computador:</p><ol class="install-steps"><li>Procure o ícone de instalação na barra de endereço.</li><li>Escolha “Instalar CHECK-SELT”.</li><li>Confirme a instalação.</li></ol>'}
-function enderecoDoPortal(){return location.href.split('#')[0].split('?')[0]}
+/* 04/10/2026 (V5.6, decisão 4a): o endereço que se copia é o do site, não o deste portal antigo. */
+function enderecoDoPortal(){return 'https://checkselt.com/'}
 function ligarCopiar(){var b=installInstructions.querySelector('[data-copiar]');if(!b)return;b.addEventListener('click',function(){var url=enderecoDoPortal();var aviso=function(t){b.textContent=t;setTimeout(function(){b.textContent='Copiar endereço do app'},3000)};var falhou=function(){b.textContent=url};try{if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(url).then(function(){aviso('Endereço copiado')},falhou);return}}catch(e){}falhou()})}
 function showInstructions(){installInstructions.innerHTML=instructions();ligarCopiar();if(typeof installDialog.showModal==='function')installDialog.showModal();else installDialog.setAttribute('open','')}
 function watch(r){reg=r;if(r.waiting&&navigator.serviceWorker.controller)showUpdate();r.addEventListener('updatefound',function(){var w=r.installing;if(!w)return;w.addEventListener('statechange',function(){if(w.state==='installed'&&navigator.serviceWorker.controller)showUpdate()})});r.update().catch(function(){})}
