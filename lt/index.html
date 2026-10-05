@@ -22,13 +22,24 @@
         });
         partes.push('de=pwa-antigo');
         window.location.replace('https://script.google.com/macros/s/AKfycbzo_WN_PzoRhS-LhV070vmE8GDr1vJX9qEa1iqxADe6kVhNZa968olZLVVDAtObmvE/exec' + '?' + partes.join('&'));
+      } else if (!standalone) {
+        /* 05/10/2026 (1.10.0, pedido dele: "eliminar qualquer possibilidade de instalar o app antigo"): aberto no NAVEGADOR, o link
+           antigo vai para o checkselt.com. Com consulta (link de lote da prestadora etc.), para /app/ com os mesmos pares crus (tirando
+           origem/abrir/de); sem consulta, para a página inicial do site, que tem o "Baixar o aplicativo". A página some antes, para não
+           piscar. O ícone já instalado (standalone, acima) continua abrindo o /exec com a marca, como antes. */
+        document.documentElement.classList.add('installed-launch');
+        var pares = String(location.search || '').replace(/^\?/, '').split('&').filter(function (p) {
+          var k = p.split('=')[0];
+          return p && k !== 'origem' && k !== 'abrir' && k !== 'de';
+        });
+        window.location.replace(pares.length ? 'https://checkselt.com/app/?' + pares.join('&') : 'https://checkselt.com/');
       }
     }());
   </script>
   <meta name="theme-color" content="#0b293d">
   <meta name="description" content="CHECK-SELT: comissionamento de obras, pendências e ferramentas de campo para subestações, linhas de transmissão e distribuição, em um só aplicativo.">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-capable" content="yes">
+  <!-- 1.10.0 (05/10/2026): sem o link do manifesto nem as metas de "app" (as duas *-web-app-capable) — o navegador não oferece
+       mais instalar o app antigo (nem pelo menu). O ícone já instalado continua abrindo pelo teste de standalone acima. -->
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="CHECK-SELT">
   <title>CHECK-SELT | Subestações, linhas e distribuição</title>
@@ -56,7 +67,6 @@
   <link rel="preconnect" href="https://script.googleusercontent.com">
   <link rel="dns-prefetch" href="//script.google.com">
   <link rel="dns-prefetch" href="//script.googleusercontent.com">
-  <link rel="manifest" href="manifest.json">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="icon" href="icon-192.png?v=20261004" sizes="192x192" type="image/png">
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=20261004" sizes="180x180">
@@ -71,8 +81,8 @@
   </style>
   <!-- ?v= igual à versão do app-config.js (o validador confere): sem isso, no primeiro lançamento depois de
        publicar, o app.js velho do cache do service worker abriria o app sem a marca de=pwa-antigo. -->
-  <script src="app-config.js?v=1.9.0" defer></script>
-  <script src="app.js?v=1.9.0" defer></script>
+  <script src="app-config.js?v=1.10.0" defer></script>
+  <script src="app.js?v=1.10.0" defer></script>
 <style>.portal-links{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:22px}.portal-links a,.portal-links button{color:#bdf3d9;font:inherit;font-size:.82rem;font-weight:600;background:none;border:1px solid rgba(92,224,168,.22);padding:10px 12px;border-radius:10px;text-decoration:none;cursor:pointer}.portal-links button[hidden]{display:none}.share-status{font-size:.82rem;line-height:1.5;color:#b8c7d5;text-align:center}.wordmark p{line-height:1.6;letter-spacing:.08em;font-weight:600}    .update-banner {
       position: fixed;
       z-index: 30;

@@ -70,9 +70,14 @@ if (manifest) {
 }
 
 const indexHtml = await readFile(base + 'index.html', 'utf8').catch(() => '');
-for (const reference of ['manifest.json', 'app-config.js', 'app.js', 'styles.css']) {
+for (const reference of ['app-config.js', 'app.js', 'styles.css']) {
   if (!indexHtml.includes(reference)) failures.push(`index.html não referencia ${reference}.`);
 }
+/* 1.10.0 (05/10/2026, pedido dele: não deixar instalar o app antigo): sem manifesto nem as metas de "app" no index.html, e o navegador
+   vai para o checkselt.com. O manifest.json continua no repositório (os ícones já instalados ainda o leem). */
+if (/<link[^>]+rel=["']manifest["']/i.test(indexHtml)) failures.push('index.html não pode ter <link rel="manifest"> (o app antigo não se instala mais).');
+if (/name=["'](mobile-web-app-capable|apple-mobile-web-app-capable)["']/i.test(indexHtml)) failures.push('index.html não pode ter mobile-web-app-capable / apple-mobile-web-app-capable.');
+if (!indexHtml.includes("'https://checkselt.com/app/?' + pares.join('&') : 'https://checkselt.com/'")) failures.push('index.html deve mandar quem abre no navegador para o checkselt.com.');
 for (const element of ['installButton', 'openButton', 'installDialog', 'launchOverlay']) {
   if (!indexHtml.includes(`id="${element}"`)) failures.push(`Portal perdeu o elemento obrigatório ${element}.`);
 }
