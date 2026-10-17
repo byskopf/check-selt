@@ -21,7 +21,9 @@
           return p && k !== 'origem' && k !== 'abrir' && k !== 'de';
         });
         partes.push('de=pwa-antigo');
-        window.location.replace('https://script.google.com/macros/s/AKfycbzo_WN_PzoRhS-LhV070vmE8GDr1vJX9qEa1iqxADe6kVhNZa968olZLVVDAtObmvE/exec' + '?' + partes.join('&'));
+        /* 17/10/2026 (1.11.0, pedido dele: "mude"): o ícone antigo também abre o app novo no checkselt.com/app/ (sem a faixa do Google,
+           dentro do site), em vez do /exec. O /app/ descarta a marca de=pwa-antigo. Login e fila do app antigo não passam. */
+        window.location.replace('https://checkselt.com/app/' + (partes.length ? '?' + partes.join('&') : ''));
       } else if (!standalone) {
         /* 05/10/2026 (1.10.0, pedido dele: "eliminar qualquer possibilidade de instalar o app antigo"): aberto no NAVEGADOR, o link
            antigo vai para o checkselt.com. Com consulta (link de lote da prestadora etc.), para /app/ com os mesmos pares crus (tirando
@@ -81,8 +83,8 @@
   </style>
   <!-- ?v= igual à versão do app-config.js (o validador confere): sem isso, no primeiro lançamento depois de
        publicar, o app.js velho do cache do service worker abriria o app sem a marca de=pwa-antigo. -->
-  <script src="app-config.js?v=1.10.0" defer></script>
-  <script src="app.js?v=1.10.0" defer></script>
+  <script src="app-config.js?v=1.11.0" defer></script>
+  <script src="app.js?v=1.11.0" defer></script>
 <style>.portal-links{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:22px}.portal-links a,.portal-links button{color:#bdf3d9;font:inherit;font-size:.82rem;font-weight:600;background:none;border:1px solid rgba(92,224,168,.22);padding:10px 12px;border-radius:10px;text-decoration:none;cursor:pointer}.portal-links button[hidden]{display:none}.share-status{font-size:.82rem;line-height:1.5;color:#b8c7d5;text-align:center}.wordmark p{line-height:1.6;letter-spacing:.08em;font-weight:600}    .update-banner {
       position: fixed;
       z-index: 30;

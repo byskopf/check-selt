@@ -6,7 +6,7 @@
    oferecer a ida ao checkselt.com. O appUrl continua SEM consulta: a marca entra por código, e o index.html usa a
    mesma literal. O ?v= dos scripts no index.html e do importScripts no sw.js acompanha esta versão. */
 var CHECK_LT_CONFIG = Object.freeze({
-  version: '1.10.0',
+  version: '1.11.0',
   iconVersion: '20261004',
   appUrl: 'https://script.google.com/macros/s/AKfycbzo_WN_PzoRhS-LhV070vmE8GDr1vJX9qEa1iqxADe6kVhNZa968olZLVVDAtObmvE/exec'
 });
